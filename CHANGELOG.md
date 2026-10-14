@@ -10,6 +10,8 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-10-14
+
 ### Added
 
 - First version of the evcc integration (Gladys 5.1 or later), local only.
@@ -29,4 +31,5 @@ the notes of the version's GitHub Release.
   password, evcc versions before and after 0.317.
 - Texts and documentation in English, French, German and Spanish.
 
-[Unreleased]: https://github.com/guim31/gladys-evcc/commits/main
+[Unreleased]: https://github.com/guim31/gladys-evcc/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/guim31/gladys-evcc/releases/tag/v1.0.0
