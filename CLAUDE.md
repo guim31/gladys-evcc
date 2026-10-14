@@ -16,8 +16,8 @@ its only runtime dependency. It started from the official JavaScript template.
 ```bash
 npm install
 npm test                                  # node --test, the built-in runner
-node --test test/devices.test.js          # one file
-node --test --test-name-pattern "plug"    # tests whose name matches
+node --test test/hub.test.js              # one file
+node --test --test-name-pattern "session" # tests whose name matches
 npm run lint                              # ESLint
 npm run format:check                      # Prettier, as the CI runs it
 npm run format                            # Prettier, fix in place
@@ -31,16 +31,23 @@ pushing.
 ## Architecture
 
 ```
-index.js                          SDK wiring only: handlers registered before connect()
-src/devices/index.js              registry of the device blueprints + dispatch helpers
-src/devices/<type>.js             one device type per file (buildDevice, onPoll, onSetValue...)
+index.js                          SDK wiring only (src/app.js registers the handlers)
+src/app.js                        handlers registered before connect(), test seams
+src/hub.js                        link to evcc, states, connection status, scene events, commands
+src/evcc/client.js                REST client: state, mode, limits, admin login on 401
+src/evcc/socket.js                websocket /ws with reconnection and idle watchdog
+src/evcc/model.js                 evcc state of every version -> snapshot (modes, charging state)
+src/devices.js                    snapshot -> devices (site, loadpoints, vehicles) and states
+src/events.js                     successive snapshots -> scene events (sessions, quiet period)
 src/scenes.js                     scene action handlers (manifest `scene_actions`)
 src/widgets.js                    dashboard widget handlers (manifest `widgets`)
+src/texts.js                      every text, in four languages
+src/store.js                      structure of the installation under /data
 src/config.js                     DEFAULT_CONFIG (mirrors the manifest defaults) + normalization
-src/weather.js                    example driver (Open-Meteo)
 gladys-assistant-integration.json manifest: name, config_schema, actions, image...
-docs/en.md, docs/fr.md            user documentation, re-hosted by Gladys (mandatory)
-test/                             node --test, against the SDK's fake Gladys (integration-sdk/testing)
+docs/{en,fr,de,es}.md             user documentation, re-hosted by Gladys (en, fr mandatory)
+test/                             node --test, against the SDK's fake Gladys and a fake evcc
+test/fixtures/evcc/               real `evcc --demo` answers (0.210.0, 0.317.1), cleaned
 .github/scripts/release.mjs       release helpers (manifest bump, changelog), tested in test/
 ```
 
@@ -70,8 +77,9 @@ test/                             node --test, against the SDK's fake Gladys (in
   `type: "provider"`: 5.1.0). `test/manifest.test.js` ties the manifest to the
   code (defaults, action, scene and widget handlers): change both sides
   together.
-- **User-facing text** is bilingual (English and French): action messages,
-  manifest texts, and `docs/en.md` / `docs/fr.md`, kept in sync.
+- **User-facing text** exists in English, French, German and Spanish: action
+  messages, widget texts, feature names, manifest texts, and `docs/*.md`, kept
+  in sync (`test/i18n.test.js`).
 - **Style.** Prettier formats, ESLint catches mistakes. Comments explain why,
   in English. Tests never touch the network.
 
@@ -233,3 +241,59 @@ long, et sur un « Sie »/« Ihr… » de politesse en allemand. Le store exige 
 - Docs `en`, `fr`, `de`, `es` avec les mêmes sections.
 - Chauffe, ouverture, sécurité : ne rien rendre pilotable « comme un thermostat » ou par un assistant
   vocal quand une erreur serait dangereuse (leçon d'OctoPrint).
+
+## evcc (intégration propre à ce dépôt)
+
+Développée **sans borne réelle**, contre `evcc --demo` en Docker (image officielle `evcc/evcc`,
+0.210.0 et 0.317.1 ; 0.133 n'a pas de mode démo). Réponses enregistrées dans `test/fixtures/evcc/`.
+
+**API d'evcc** (vérifiée dans `server/http.go`, 0.317, et sur la démo)
+
+- `GET /api/state` : tout l'état. Avant 0.200, enveloppé dans `{ result }`. **Il contient aussi les
+  réglages d'evcc, secrets compris** (identifiants MQTT/InfluxDB, certificat EEBUS avec sa clé) : jamais
+  journalisé, ces clés sont jetées dès la lecture (`IGNORED` de `src/evcc/model.js`), et les fixtures
+  en sont purgées.
+- Websocket `/ws`, sans authentification : un objet JSON par clé changée (`{"loadpoints.0.chargePower":
+3220}`, `{"grid": {...}}`), le premier trame contient tout l'état aplati. Un cycle (30 s par défaut)
+  envoie des dizaines de trames : l'état n'est relu qu'après la rafale (`processDelay`), sinon un
+  événement verrait un demi-cycle (véhicule effacé avant le débranchement…).
+- Écritures (`POST`) : `/api/loadpoints/{id}/mode/{off|pv|minpv|now|smart}` (id à partir de 1),
+  `/limitsoc/{0..100}`, `/limitenergy/{kWh}`, `/api/vehicles/{name}/limitsoc/{n}` (nom
+  `[A-Za-z0-9_.:-]`, `db:3` pour un véhicule créé dans l'interface). Aucune n'exige le mot de passe
+  admin en 0.317 (seules les routes `/api/config/*` le font) ; le client se connecte
+  (`/api/auth/login`, cookie `auth`) sur un 401 si un mot de passe est configuré.
+- Unités : `sessionEnergy`, `chargedEnergy`, `chargeRemainingEnergy` en **Wh** ; durées en
+  **secondes** ; `vehicleRange` en km ; puissances en W ; `battery.power` > 0 = **décharge**.
+- Versions : 0.2xx a `batteryPower`/`batterySoc` en tête et `battery` en tableau ; ensuite `battery`
+  est un objet `{ power, soc, devices }`. `gridPower` (ancien) → `grid.power`.
+- **Refonte des modes (0.317, evcc-io/evcc#32490, septembre 2026)** : `pv` s'appelle `smart`, `minpv`
+  devient `smart` + `alwaysCharge: on|once`. Les écritures acceptent toujours `pv`/`minpv` et les
+  traduisent. L'intégration garde `off|pv|minpv|now` comme vocabulaire stable (valeurs du `text/select`,
+  des déclencheurs et des actions) : lecture `smart` → `pv` ou `minpv` selon `alwaysCharge`.
+- Le SoC et l'autonomie d'un véhicule ne sont connus que **par le point de charge** où il est branché
+  (`vehicleSoc`, `vehicleRange`) : la dernière valeur reste sur l'appareil véhicule.
+
+**Choix de conception**
+
+- Identités : `site:main`, `loadpoint:<id d'API>`, `vehicle:<nom evcc assaini>` (`db:3` → `db-3`).
+- Couples : `charging-station/charging-state` pour l'état (0 en charge, 1 branché en mode Arrêt,
+  2 activé mais le véhicule ne tire rien, 3 evcc retient la charge, 4 libre) ; `grid-sensor/power`
+  signé, bornes ±100 kW ; batterie maison en `battery-storage` charge/décharge (pas de puissance
+  signée) ; mode en `text/select` ; compteur de la borne (`chargeTotalImport`) en
+  `energy-sensor/index`, seul couple que le module Énergie dérive en consommation (sous-compteur :
+  pas de double comptage) ; « charge au prix bas » en `input/binary`.
+- Équipement intégré (`chargerFeatureIntegratedDevice`, pompe à chaleur) : pas de fonctions véhicule.
+- Structure gardée sous `/data` (`evcc-structure.json`) et fusionnée : une fonction vue une fois reste,
+  et les appareils restent dans Découverte quand evcc est arrêté.
+- États : poussés (`should_poll: false`), puissances arrondies à 10 W, au plus toutes les 5 s,
+  `publishChangedStates` avec battement de 6 h. `onPoll` ne relit evcc par REST que si le websocket
+  est tombé.
+- Déclencheurs dérivés des instantanés (`src/events.js`) : rien au premier instantané après
+  (re)connexion ; « véhicule branché » attend l'identification (2 min max) pour qu'une scène puisse
+  filtrer sur le véhicule ; « charge terminée » après 10 min d'arrêt (les pauses nuageuses du mode
+  solaire ne comptent pas) ou au débranchement ; les valeurs de session au débranchement viennent du
+  dernier instantané branché.
+- Widget : valeurs littérales (pas besoin que les appareils soient ajoutés), 3 tuiles + 1 statut +
+  4 boutons de mode = 8 composants ; hors ligne : une légende et pas de bouton.
+- Ni plans de charge (création), ni phases, ni courants, ni batterie maison pilotables : restent dans
+  evcc (limites de la doc).

@@ -1,67 +1,154 @@
-# Template de démonstration
+# evcc
 
-Ceci est la documentation utilisateur de l'intégration. Gladys ré-héberge ce
-fichier et affiche un lien **Documentation** permanent vers lui dans l'écran
-de configuration (dans la langue de l'utilisateur, avec l'anglais en repli) —
-c'est au moment de configurer que l'utilisateur en a le plus besoin. Gardez
-les courtes indications d'accueil dans les blocs `section` du `config_schema`
-du manifest ; mettez ici le pas-à-pas détaillé (captures d'écran, dépannage…).
+Cette intégration amène [evcc](https://evcc.io) dans Gladys. evcc pilote la recharge des véhicules
+électriques avec le surplus solaire, les tarifs dynamiques ou un plan de charge. Gladys suit evcc
+en direct (production solaire, maison, réseau, batterie, points de charge, véhicules), change le
+mode de charge et les limites, et déclenche des scènes quand un véhicule est branché ou qu'une
+charge se termine.
 
-## Ce que vous obtenez
+L'intégration parle à evcc sur votre réseau local, sans cloud. Elle a été développée et testée
+contre le mode démo d'evcc (versions 0.210 et 0.317), **sans borne réelle : vos retours sont les
+bienvenus**.
 
-Six appareils de démonstration apparaissent après l'installation : une
-station météo (vraies données Open-Meteo), un interrupteur, une lampe
-variable, une prise connectée avec mesure de puissance, un détecteur de
-mouvement et une caméra.
+## Prérequis
+
+- Gladys Assistant 5.1 ou plus récent.
+- Un evcc qui tourne sur votre réseau (Raspberry Pi, Docker, Home Assistant…), version 0.200 ou
+  plus récente conseillée. Les versions plus anciennes sont lues au mieux.
+- L'adresse d'evcc, telle que vous l'ouvrez dans votre navigateur, par exemple
+  `http://192.168.1.20:7070`. Gladys doit pouvoir la joindre.
 
 ## Configuration
 
-1. Ouvrez l'onglet **Configuration** de l'intégration.
-2. Renseignez la **latitude** et la **longitude** que la station météo de
-   démonstration doit observer (Paris par défaut), et choisissez votre unité
-   de température. L'**intervalle de rafraîchissement** règle la fréquence
-   de lecture de la station météo et de la puissance de la prise : toutes
-   les 5 minutes par défaut, toutes les minutes au plus.
-3. Enregistrez : les appareils apparaissent dans l'onglet **Découverte**,
-   prêts à être ajoutés.
+1. **Intégrations → evcc**, puis **Configuration**.
+2. **Adresse d'evcc** : l'adresse de son interface web. Sans port, le 7070 est utilisé. Derrière un
+   proxy inverse, un chemin est accepté (`https://exemple.org/evcc`).
+3. **Mot de passe administrateur** : facultatif. Les versions récentes d'evcc changent le mode et les
+   limites sans lui. Si votre evcc (ou votre proxy) répond « non autorisé », saisissez-le.
+4. **Langue des noms de fonctionnalités** : le français par défaut. Les noms sont figés quand vous
+   ajoutez l'appareil.
+5. Enregistrez, puis cliquez sur **Tester la connexion** : la version d'evcc et le nombre de points
+   de charge et de véhicules s'affichent.
+6. Dans l'onglet **Découverte**, ajoutez les appareils voulus.
 
-Le réglage **Préférer la connexion locale** pilote la prise de
-démonstration : elle affiche en badge le canal réellement utilisé (local ou
-cloud), avec un point orange quand elle fonctionne en mode dégradé (local
-refusé, bascule cloud).
+L'intégration suit evcc par son websocket : les valeurs arrivent à chaque cycle d'evcc (30 s par
+défaut). Si le websocket tombe, elle relit l'état toutes les 30 s et le reconnecte seule.
 
-## Actions
+## Les appareils
 
-- **Tester le fournisseur météo** — effectue une requête en direct vers
-  Open-Meteo et affiche la température et l'humidité actuelles sous le
-  bouton.
-- **Identifier un appareil** — choisissez un de vos appareils dans la liste
-  et il se signale (la lampe de démonstration « clignote » dans les logs).
+### Site
 
-## Scènes
+Un appareil au nom de votre site evcc, avec ce que evcc mesure :
 
-L'intégration ajoute ses propres cartes à l'éditeur de scènes (Gladys 5.1
-ou plus récent), dans la catégorie **Intégrations** :
+| Fonctionnalité      | Détail                                                                      |
+| ------------------- | --------------------------------------------------------------------------- |
+| Production solaire  | W, si evcc a un compteur photovoltaïque                                     |
+| Consommation maison | W                                                                           |
+| Réseau              | W, positif quand la maison soutire, négatif quand elle injecte              |
+| Batterie maison     | niveau en %, puissance de charge et de décharge en W, s'il y a une batterie |
+| Prix du réseau      | prix courant du kWh, si un tarif est configuré dans evcc                    |
 
-- **Mouvement détecté** (déclencheur) — lance la scène quand un détecteur
-  de démonstration voit bouger quelque chose. Choisissez éventuellement le
-  détecteur et ce qui a bougé (personne, animal) ; laissés vides, toute
-  détection correspond. Les actions suivantes peuvent lire ce qui a bougé
-  avec `{{triggerEvent.data.target}}`.
-- **Identifier un appareil** (action) — fait se signaler l'appareil choisi.
-  Elle indique si l'appareil a pu se signaler, pour que les actions
-  suivantes puissent en dépendre.
+### Point de charge
 
-## Tableau de bord
+Un appareil par point de charge d'evcc :
 
-Ajoutez le widget **État de la démo** à un tableau de bord : il affiche en
-direct la température de la station météo et la puissance de la prise du
-bureau, la connexion utilisée par la prise (en orange si dégradée) et la
-position observée. Son bouton **Identifier la lampe** fait se signaler la
-lampe de démonstration.
+| Fonctionnalité        | Détail                                                                                                         |
+| --------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Mode                  | **pilotable** : Arrêt, Solaire, Min + solaire, Rapide                                                          |
+| État de la charge     | en charge, branché, en attente (evcc attend le soleil ou un créneau), pause (véhicule plein), inactif          |
+| Véhicule branché      | oui ou non                                                                                                     |
+| Puissance de charge   | kW                                                                                                             |
+| Intensité de charge   | A                                                                                                              |
+| Énergie de la session | kWh chargés depuis le branchement                                                                              |
+| Temps restant         | minutes, estimation d'evcc pendant la charge                                                                   |
+| Limite de charge      | **pilotable** : niveau de batterie visé pour cette session, en %                                               |
+| Véhicule              | nom du véhicule identifié par evcc                                                                             |
+| Charge au prix bas    | evcc charge parce que le réseau est bon marché (tarif dynamique)                                               |
+| Compteur de la borne  | index en kWh, si la borne a un compteur : Gladys en déduit la consommation et son coût dans le suivi d'énergie |
+
+Depuis evcc 0.317, le mode « Solaire » s'appelle **Smart** dans evcc, et « Min + solaire » est Smart
+avec l'option **Toujours charger**. L'intégration garde les quatre modes historiques, compris par
+toutes les versions d'evcc.
+
+Un équipement intégré (pompe à chaleur, prise pilotée par evcc) n'a que le mode, l'état, la
+puissance, l'énergie et le compteur.
+
+### Véhicule
+
+Un appareil par véhicule configuré dans evcc :
+
+| Fonctionnalité     | Détail                                                                 |
+| ------------------ | ---------------------------------------------------------------------- |
+| Niveau de batterie | %, connu quand le véhicule est branché (la dernière valeur reste)      |
+| Autonomie          | km, idem                                                               |
+| Limite de charge   | **pilotable** : niveau de batterie maximum du véhicule dans evcc, en % |
+| Branché            | le véhicule est branché sur un point de charge                         |
+| Plan de charge     | le prochain plan (niveau et heure), ou « Aucun plan »                  |
+
+## Widget de tableau de bord
+
+Le widget **evcc** montre le flux d'énergie (solaire, maison, réseau en kW), la batterie maison, le
+prix du réseau et une ligne par point de charge (état, puissance, mode). Quatre boutons changent le
+mode d'un point de charge : celui choisi dans les réglages du widget, sinon le premier. Le mode
+courant porte une coche. Si evcc ne répond plus, le widget montre les dernières valeurs connues,
+sans boutons.
+
+## Déclencheurs de scène
+
+| Déclencheur           | Quand                                                                        | Variables                                                                             |
+| --------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Véhicule branché      | un véhicule est branché, une fois identifié par evcc (2 minutes au plus)     | point de charge, véhicule                                                             |
+| Véhicule débranché    | un véhicule est débranché                                                    | point de charge, véhicule, énergie chargée (kWh), durée branché (minutes)             |
+| Charge démarrée       | une charge démarre ; une courte pause (nuages) n'est pas une nouvelle charge | point de charge, véhicule, mode                                                       |
+| Charge terminée       | la charge est arrêtée depuis 10 minutes, ou le véhicule est débranché        | point de charge, véhicule, énergie (kWh), durée de charge (minutes), part solaire (%) |
+| Mode de charge changé | le mode d'un point de charge change, dans evcc ou depuis Gladys              | point de charge, nouveau mode, mode précédent                                         |
+
+Dans un message, une variable s'écrit `{{triggerEvent.data.vehicle}}`, `{{triggerEvent.data.energy_kwh}}`…
+
+Chaque déclencheur peut être limité à un point de charge et, sauf le changement de mode, à un
+véhicule. Le changement de mode peut être limité à un mode.
+
+## Actions de scène
+
+| Action                      | Effet                                                                                                                    |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Changer le mode de charge   | Arrêt, Solaire, Min + solaire ou Rapide sur un point de charge                                                           |
+| Régler une limite de charge | niveau de batterie (%) d'un point de charge ou d'un véhicule, ou énergie (kWh) d'un point de charge ; 0 retire la limite |
+
+Une action refusée (evcc injoignable, valeur hors bornes, appareil qui n'est pas un point de charge)
+échoue avec un message clair, et la scène continue.
+
+## Exemples de scènes
+
+- **Charge rapide le soir si la batterie est basse** : à 21 h, si le niveau de batterie du véhicule
+  est sous 30 %, changer le mode du point de charge en Rapide, puis régler la limite à 60 %.
+- **Prévenir quand la voiture est pleine** : déclencheur « Charge terminée » sur votre véhicule,
+  envoyer « Charge terminée : `{{triggerEvent.data.energy_kwh}}` kWh, dont
+  `{{triggerEvent.data.solar_percent}}` % de solaire ».
+- **Retour au solaire au départ** : déclencheur « Véhicule débranché », changer le mode en Solaire
+  pour que la prochaine charge reparte sur le surplus.
 
 ## Dépannage
 
-L'intégration journalise tout ce qu'elle fait : consultez les logs de
-l'intégration depuis l'interface Gladys (ou `docker logs` sur l'hôte) avec
-`LOG_LEVEL=debug` pour le détail complet.
+- **« evcc ne répond pas à l'adresse configurée »** : ouvrez l'adresse dans un navigateur depuis le
+  réseau de Gladys. Vérifiez le port (7070 par défaut) et qu'aucun pare-feu ne bloque Gladys.
+- **« L'adresse configurée ne répond pas comme evcc »** : l'adresse pointe vers un autre service, ou
+  un proxy renvoie une page d'erreur.
+- **« evcc demande son mot de passe administrateur »** : saisissez-le dans la configuration.
+- **Le niveau de batterie d'un véhicule ne bouge pas** : evcc ne lit le véhicule que lorsqu'il est
+  branché (ou s'il a une intégration constructeur). La dernière valeur reste affichée.
+- **« Véhicule branché » arrive avec un véhicule vide** : evcc n'a pas identifié le véhicule en
+  2 minutes. Vérifiez l'identification dans evcc, ou associez un véhicule par défaut au point de
+  charge.
+- **Journaux détaillés** : ajoutez la variable `LOG_LEVEL=debug` au conteneur.
+
+## Limites
+
+- Une seule instance evcc par installation de l'intégration.
+- Les plans de charge se lisent mais ne se créent pas depuis Gladys (utilisez evcc).
+- Les plans répétitifs (chaque jour de la semaine) ne sont pas affichés.
+- Le nombre de phases, le courant minimum et maximum, la batterie maison et les réglages avancés
+  restent dans evcc.
+- Développée sans borne réelle, contre le mode démo d'evcc : vos retours sont les bienvenus sur le
+  forum de Gladys.
+- Projet indépendant, non affilié à evcc.

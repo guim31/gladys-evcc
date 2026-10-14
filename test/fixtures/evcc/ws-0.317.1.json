@@ -1,0 +1,1332 @@
+[
+  {
+    "apiReady": true,
+    "aux": [],
+    "battery": {
+      "power": 0,
+      "capacity": 13.4,
+      "soc": 23,
+      "devices": [
+        {
+          "name": "battery",
+          "power": 0,
+          "capacity": 13.4,
+          "soc": 23,
+          "controllable": true
+        }
+      ]
+    },
+    "batteryDischargeControl": false,
+    "batteryGridChargeActive": false,
+    "batteryGridDischarge": false,
+    "batteryGridDischargeActive": false,
+    "batteryMode": "unknown",
+    "bufferSoc": 0,
+    "bufferStartSoc": 0,
+    "circuitsConfig": {},
+    "config": "",
+    "country": "",
+    "currency": "EUR",
+    "demoMode": true,
+    "deviceColors": [],
+    "experimental": false,
+    "ext": [],
+    "greenShareHome": 1,
+    "greenShareLoadpoints": 1,
+    "grid": {
+      "name": "grid",
+      "power": -564.6106592457754
+    },
+    "gridConfigured": true,
+    "gridExportLimit": 0,
+    "homePower": 500,
+    "interval": 3,
+    "loadpoints.0.alwaysCharge": "off",
+    "loadpoints.0.batteryBoost": false,
+    "loadpoints.0.batteryBoostLimit": 100,
+    "loadpoints.0.chargeDuration": 90,
+    "loadpoints.0.chargePower": 3220,
+    "loadpoints.0.chargeRemainingDuration": 22045,
+    "loadpoints.0.chargeRemainingEnergy": 19101.176,
+    "loadpoints.0.chargedEnergy": 80.504,
+    "loadpoints.0.chargerFeatureAutodetectDisabled": false,
+    "loadpoints.0.chargerFeatureAverage": false,
+    "loadpoints.0.chargerFeatureCacheable": false,
+    "loadpoints.0.chargerFeatureClimaterDisabled": false,
+    "loadpoints.0.chargerFeatureCoarseCurrent": false,
+    "loadpoints.0.chargerFeatureContinuous": false,
+    "loadpoints.0.chargerFeatureDemandTemperature": false,
+    "loadpoints.0.chargerFeatureDemandWeekday": false,
+    "loadpoints.0.chargerFeatureHeating": false,
+    "loadpoints.0.chargerFeatureIntegratedDevice": false,
+    "loadpoints.0.chargerFeatureOffline": false,
+    "loadpoints.0.chargerFeatureRetryable": false,
+    "loadpoints.0.chargerFeatureStreaming": false,
+    "loadpoints.0.chargerFeatureSwitchDevice": false,
+    "loadpoints.0.chargerFeatureWakeUpDisabled": false,
+    "loadpoints.0.chargerFeatureWelcomeCharge": false,
+    "loadpoints.0.chargerIcon": "",
+    "loadpoints.0.chargerPhases1p3p": false,
+    "loadpoints.0.chargerSinglePhase": false,
+    "loadpoints.0.chargerStatusReason": "unknown",
+    "loadpoints.0.charging": true,
+    "loadpoints.0.connected": true,
+    "loadpoints.0.connectedDuration": 0,
+    "loadpoints.0.disableDelay": 180,
+    "loadpoints.0.disableThreshold": 0,
+    "loadpoints.0.effectiveLimitSoc": 100,
+    "loadpoints.0.effectiveMaxCurrent": 16,
+    "loadpoints.0.effectiveMinCurrent": 6,
+    "loadpoints.0.effectiveMinSoc": 0,
+    "loadpoints.0.effectivePlanId": 0,
+    "loadpoints.0.effectivePlanSoc": 0,
+    "loadpoints.0.effectivePlanStrategy": {
+      "continuous": false,
+      "precondition": 0
+    },
+    "loadpoints.0.effectivePlanTime": null,
+    "loadpoints.0.effectivePriority": 0,
+    "loadpoints.0.enableDelay": 60,
+    "loadpoints.0.enableThreshold": 0,
+    "loadpoints.0.enabled": true,
+    "loadpoints.0.last24hEnergy": 0,
+    "loadpoints.0.last7dEnergy": 0,
+    "loadpoints.0.limitEnergy": 0,
+    "loadpoints.0.limitSoc": 0,
+    "loadpoints.0.maxCurrent": 16,
+    "loadpoints.0.minCurrent": 6,
+    "loadpoints.0.minSoc": 0,
+    "loadpoints.0.minSocNotReached": false,
+    "loadpoints.0.mode": "smart",
+    "loadpoints.0.name": "lp-1",
+    "loadpoints.0.offeredCurrent": 14,
+    "loadpoints.0.phaseAction": "inactive",
+    "loadpoints.0.phaseRemaining": 0,
+    "loadpoints.0.phasesActive": 3,
+    "loadpoints.0.phasesConfigured": 3,
+    "loadpoints.0.plan": null,
+    "loadpoints.0.planActive": false,
+    "loadpoints.0.planEnergy": 0,
+    "loadpoints.0.planOverrun": 0,
+    "loadpoints.0.planProjectedEnd": null,
+    "loadpoints.0.planProjectedStart": null,
+    "loadpoints.0.planStrategy": {
+      "continuous": false,
+      "precondition": 0
+    },
+    "loadpoints.0.planTime": null,
+    "loadpoints.0.priority": 0,
+    "loadpoints.0.pvAction": "inactive",
+    "loadpoints.0.pvRemaining": 0,
+    "loadpoints.0.sessionCo2PerKWh": 0,
+    "loadpoints.0.sessionEnergy": 80.504,
+    "loadpoints.0.sessionPrice": 0.006440336265315556,
+    "loadpoints.0.sessionPricePerKWh": 0.08,
+    "loadpoints.0.sessionSolarPercentage": 100,
+    "loadpoints.0.smartCostActive": false,
+    "loadpoints.0.smartCostLimit": null,
+    "loadpoints.0.smartCostNextStart": null,
+    "loadpoints.0.smartFeedInPriorityActive": false,
+    "loadpoints.0.smartFeedInPriorityLimit": null,
+    "loadpoints.0.smartFeedInPriorityNextStart": null,
+    "loadpoints.0.solarShare": 1,
+    "loadpoints.0.suggestion": null,
+    "loadpoints.0.title": "Carport",
+    "loadpoints.0.todayEnergy": 81,
+    "loadpoints.0.ui": {
+      "minTemp": 0,
+      "maxTemp": 0
+    },
+    "loadpoints.0.vehicleClimaterActive": null,
+    "loadpoints.0.vehicleDetectionActive": false,
+    "loadpoints.0.vehicleLimitSoc": 0,
+    "loadpoints.0.vehicleName": "vehicle_1",
+    "loadpoints.0.vehicleOdometer": 0,
+    "loadpoints.0.vehicleRange": 185,
+    "loadpoints.0.vehicleSoc": 63.1,
+    "loadpoints.0.vehicleTitle": "blue e-Golf",
+    "loadpoints.0.vehicleWelcomeActive": false,
+    "loadpoints.1.alwaysCharge": "off",
+    "loadpoints.1.batteryBoost": false,
+    "loadpoints.1.batteryBoostLimit": 100,
+    "loadpoints.1.chargeDuration": 0,
+    "loadpoints.1.chargePower": 0,
+    "loadpoints.1.chargeRemainingEnergy": 74352.941,
+    "loadpoints.1.chargedEnergy": 0,
+    "loadpoints.1.chargerFeatureAutodetectDisabled": false,
+    "loadpoints.1.chargerFeatureAverage": false,
+    "loadpoints.1.chargerFeatureCacheable": false,
+    "loadpoints.1.chargerFeatureClimaterDisabled": false,
+    "loadpoints.1.chargerFeatureCoarseCurrent": false,
+    "loadpoints.1.chargerFeatureContinuous": false,
+    "loadpoints.1.chargerFeatureDemandTemperature": false,
+    "loadpoints.1.chargerFeatureDemandWeekday": false,
+    "loadpoints.1.chargerFeatureHeating": false,
+    "loadpoints.1.chargerFeatureIntegratedDevice": false,
+    "loadpoints.1.chargerFeatureOffline": false,
+    "loadpoints.1.chargerFeatureRetryable": false,
+    "loadpoints.1.chargerFeatureStreaming": false,
+    "loadpoints.1.chargerFeatureSwitchDevice": false,
+    "loadpoints.1.chargerFeatureWakeUpDisabled": false,
+    "loadpoints.1.chargerFeatureWelcomeCharge": false,
+    "loadpoints.1.chargerIcon": "",
+    "loadpoints.1.chargerPhases1p3p": true,
+    "loadpoints.1.chargerSinglePhase": false,
+    "loadpoints.1.charging": false,
+    "loadpoints.1.connected": true,
+    "loadpoints.1.connectedDuration": 0,
+    "loadpoints.1.disableDelay": 180,
+    "loadpoints.1.disableThreshold": 0,
+    "loadpoints.1.effectiveLimitSoc": 100,
+    "loadpoints.1.effectiveMaxCurrent": 16,
+    "loadpoints.1.effectiveMinCurrent": 6,
+    "loadpoints.1.effectiveMinSoc": 0,
+    "loadpoints.1.effectivePlanId": 0,
+    "loadpoints.1.effectivePlanSoc": 0,
+    "loadpoints.1.effectivePlanStrategy": {
+      "continuous": false,
+      "precondition": 0
+    },
+    "loadpoints.1.effectivePlanTime": null,
+    "loadpoints.1.effectivePriority": 0,
+    "loadpoints.1.enableDelay": 60,
+    "loadpoints.1.enableThreshold": 0,
+    "loadpoints.1.enabled": false,
+    "loadpoints.1.last24hEnergy": 0,
+    "loadpoints.1.last7dEnergy": 0,
+    "loadpoints.1.limitEnergy": 0,
+    "loadpoints.1.limitSoc": 0,
+    "loadpoints.1.maxCurrent": 16,
+    "loadpoints.1.minCurrent": 6,
+    "loadpoints.1.minSoc": 0,
+    "loadpoints.1.minSocNotReached": false,
+    "loadpoints.1.mode": "off",
+    "loadpoints.1.name": "lp-2",
+    "loadpoints.1.offeredCurrent": 0,
+    "loadpoints.1.phaseAction": "inactive",
+    "loadpoints.1.phaseRemaining": 0,
+    "loadpoints.1.phasesActive": 3,
+    "loadpoints.1.phasesConfigured": 0,
+    "loadpoints.1.plan": null,
+    "loadpoints.1.planActive": false,
+    "loadpoints.1.planEnergy": 0,
+    "loadpoints.1.planOverrun": 0,
+    "loadpoints.1.planProjectedEnd": null,
+    "loadpoints.1.planProjectedStart": null,
+    "loadpoints.1.planStrategy": {
+      "continuous": false,
+      "precondition": 0
+    },
+    "loadpoints.1.planTime": null,
+    "loadpoints.1.priority": 0,
+    "loadpoints.1.pvAction": "inactive",
+    "loadpoints.1.pvRemaining": 0,
+    "loadpoints.1.sessionCo2PerKWh": null,
+    "loadpoints.1.sessionEnergy": 0,
+    "loadpoints.1.sessionPrice": null,
+    "loadpoints.1.sessionPricePerKWh": null,
+    "loadpoints.1.sessionSolarPercentage": 0,
+    "loadpoints.1.smartCostActive": false,
+    "loadpoints.1.smartCostLimit": null,
+    "loadpoints.1.smartCostNextStart": null,
+    "loadpoints.1.smartFeedInPriorityActive": false,
+    "loadpoints.1.smartFeedInPriorityLimit": null,
+    "loadpoints.1.smartFeedInPriorityNextStart": null,
+    "loadpoints.1.solarShare": 1,
+    "loadpoints.1.suggestion": null,
+    "loadpoints.1.title": "Garage",
+    "loadpoints.1.todayEnergy": 0,
+    "loadpoints.1.ui": {
+      "minTemp": 0,
+      "maxTemp": 0
+    },
+    "loadpoints.1.vehicleClimaterActive": null,
+    "loadpoints.1.vehicleDetectionActive": false,
+    "loadpoints.1.vehicleLimitSoc": 90,
+    "loadpoints.1.vehicleName": "vehicle_2",
+    "loadpoints.1.vehicleOdometer": 0,
+    "loadpoints.1.vehicleRange": 98,
+    "loadpoints.1.vehicleSoc": 21,
+    "loadpoints.1.vehicleTitle": "white Model 3",
+    "loadpoints.1.vehicleWelcomeActive": false,
+    "loadpoints.2.alwaysCharge": "off",
+    "loadpoints.2.batteryBoost": false,
+    "loadpoints.2.batteryBoostLimit": 100,
+    "loadpoints.2.chargeDuration": 72,
+    "loadpoints.2.chargePower": 4028.649,
+    "loadpoints.2.chargedEnergy": 79.041,
+    "loadpoints.2.chargerFeatureAutodetectDisabled": false,
+    "loadpoints.2.chargerFeatureAverage": false,
+    "loadpoints.2.chargerFeatureCacheable": false,
+    "loadpoints.2.chargerFeatureClimaterDisabled": false,
+    "loadpoints.2.chargerFeatureCoarseCurrent": false,
+    "loadpoints.2.chargerFeatureContinuous": true,
+    "loadpoints.2.chargerFeatureDemandTemperature": false,
+    "loadpoints.2.chargerFeatureDemandWeekday": false,
+    "loadpoints.2.chargerFeatureHeating": true,
+    "loadpoints.2.chargerFeatureIntegratedDevice": true,
+    "loadpoints.2.chargerFeatureOffline": false,
+    "loadpoints.2.chargerFeatureRetryable": false,
+    "loadpoints.2.chargerFeatureStreaming": false,
+    "loadpoints.2.chargerFeatureSwitchDevice": true,
+    "loadpoints.2.chargerFeatureWakeUpDisabled": false,
+    "loadpoints.2.chargerFeatureWelcomeCharge": false,
+    "loadpoints.2.chargerIcon": "heatpump",
+    "loadpoints.2.chargerPhases1p3p": false,
+    "loadpoints.2.chargerSinglePhase": false,
+    "loadpoints.2.chargerStatusReason": "unknown",
+    "loadpoints.2.charging": true,
+    "loadpoints.2.connected": true,
+    "loadpoints.2.connectedDuration": 0,
+    "loadpoints.2.disableDelay": 180,
+    "loadpoints.2.disableThreshold": 0,
+    "loadpoints.2.effectiveLimitSoc": 100,
+    "loadpoints.2.effectiveMaxCurrent": 16,
+    "loadpoints.2.effectiveMinCurrent": 6,
+    "loadpoints.2.effectiveMinSoc": 0,
+    "loadpoints.2.effectivePlanId": 0,
+    "loadpoints.2.effectivePlanSoc": 0,
+    "loadpoints.2.effectivePlanStrategy": {
+      "continuous": false,
+      "precondition": 0
+    },
+    "loadpoints.2.effectivePlanTime": null,
+    "loadpoints.2.effectivePriority": 0,
+    "loadpoints.2.enableDelay": 60,
+    "loadpoints.2.enableThreshold": 0,
+    "loadpoints.2.enabled": true,
+    "loadpoints.2.last24hEnergy": 0,
+    "loadpoints.2.last7dEnergy": 0,
+    "loadpoints.2.limitEnergy": 0,
+    "loadpoints.2.limitSoc": 0,
+    "loadpoints.2.maxCurrent": 16,
+    "loadpoints.2.minCurrent": 6,
+    "loadpoints.2.minSoc": 0,
+    "loadpoints.2.minSocNotReached": false,
+    "loadpoints.2.mode": "smart",
+    "loadpoints.2.name": "lp-3",
+    "loadpoints.2.offeredCurrent": 6.278,
+    "loadpoints.2.phaseAction": "inactive",
+    "loadpoints.2.phaseRemaining": 0,
+    "loadpoints.2.phasesActive": 3,
+    "loadpoints.2.phasesConfigured": 3,
+    "loadpoints.2.plan": null,
+    "loadpoints.2.planActive": false,
+    "loadpoints.2.planEnergy": 0,
+    "loadpoints.2.planOverrun": 0,
+    "loadpoints.2.planProjectedEnd": null,
+    "loadpoints.2.planProjectedStart": null,
+    "loadpoints.2.planStrategy": {
+      "continuous": false,
+      "precondition": 0
+    },
+    "loadpoints.2.planTime": null,
+    "loadpoints.2.priority": 0,
+    "loadpoints.2.pvAction": "inactive",
+    "loadpoints.2.pvRemaining": 0,
+    "loadpoints.2.sessionCo2PerKWh": 0,
+    "loadpoints.2.sessionEnergy": 79.041,
+    "loadpoints.2.sessionPrice": 0.006323291607759731,
+    "loadpoints.2.sessionPricePerKWh": 0.08,
+    "loadpoints.2.sessionSolarPercentage": 100,
+    "loadpoints.2.smartCostActive": false,
+    "loadpoints.2.smartCostLimit": null,
+    "loadpoints.2.smartCostNextStart": null,
+    "loadpoints.2.smartFeedInPriorityActive": false,
+    "loadpoints.2.smartFeedInPriorityLimit": null,
+    "loadpoints.2.smartFeedInPriorityNextStart": null,
+    "loadpoints.2.solarShare": 1,
+    "loadpoints.2.suggestion": null,
+    "loadpoints.2.title": "Heat pump",
+    "loadpoints.2.todayEnergy": 89,
+    "loadpoints.2.ui": {
+      "minTemp": 30,
+      "maxTemp": 70
+    },
+    "loadpoints.2.vehicleClimaterActive": null,
+    "loadpoints.2.vehicleDetectionActive": false,
+    "loadpoints.2.vehicleLimitSoc": 65,
+    "loadpoints.2.vehicleName": "",
+    "loadpoints.2.vehicleOdometer": 0,
+    "loadpoints.2.vehicleRange": 0,
+    "loadpoints.2.vehicleSoc": 49.7,
+    "loadpoints.2.vehicleTitle": "",
+    "loadpoints.2.vehicleWelcomeActive": false,
+    "network": {
+      "externalUrl": "",
+      "host": "",
+      "port": 7070,
+      "internalUrl": "http://192.0.2.20:7070"
+    },
+    "ocppforwarder": {
+      "config": [],
+      "status": []
+    },
+    "optimizer": false,
+    "optimizerChargingStrategies": [
+      "charge_before_export",
+      "attenuate_demand_peaks",
+      "attenuate_feedin_peaks",
+      "attenuate_grid_peaks",
+      "none"
+    ],
+    "optimizerChargingStrategy": "charge_before_export",
+    "prioritySoc": 0,
+    "profilePercentile": null,
+    "pv": [
+      {
+        "name": "pv",
+        "power": 8313.259950494346
+      }
+    ],
+    "pvEnergy": 0,
+    "pvPower": 8313.26,
+    "residualPower": 0,
+    "setupRequired": false,
+    "siteTitle": "Demo Mode",
+    "smartCostAvailable": true,
+    "smartCostType": "priceforecast",
+    "smartFeedInPriorityAvailable": false,
+    "solarAdjusted": false,
+    "startupCompleted": true,
+    "statistics": {
+      "30d": {
+        "avgCo2": 0,
+        "avgPrice": 0,
+        "chargedKWh": 0,
+        "solarPercentage": 0
+      },
+      "365d": {
+        "avgCo2": 0,
+        "avgPrice": 0,
+        "chargedKWh": 0,
+        "solarPercentage": 0
+      },
+      "thisYear": {
+        "avgCo2": 0,
+        "avgPrice": 0,
+        "chargedKWh": 0,
+        "solarPercentage": 0
+      },
+      "total": {
+        "avgCo2": 0,
+        "avgPrice": 0,
+        "chargedKWh": 0,
+        "solarPercentage": 0
+      }
+    },
+    "system": "linux/amd64",
+    "tariffCo2": 462,
+    "tariffCo2Home": 0,
+    "tariffCo2Loadpoints": 0,
+    "tariffFeedIn": 0.08,
+    "tariffGrid": 0.313,
+    "tariffPriceHome": 0.08,
+    "tariffPriceLoadpoints": 0.08,
+    "tariffSolar": 7302,
+    "tariffTemperature": 12,
+    "tariffs": {
+      "yamlSource": "file"
+    },
+    "telemetry": false,
+    "timezone": "CEST +02:00",
+    "vehicles": {
+      "vehicle_1": {
+        "title": "blue e-Golf",
+        "capacity": 44,
+        "repeatingPlans": null,
+        "planStrategy": {
+          "continuous": false,
+          "precondition": 0
+        }
+      },
+      "vehicle_2": {
+        "title": "white Model 3",
+        "capacity": 80,
+        "repeatingPlans": null,
+        "planStrategy": {
+          "continuous": false,
+          "precondition": 0
+        }
+      },
+      "vehicle_3": {
+        "title": "green Honda e",
+        "icon": "car",
+        "capacity": 8,
+        "features": ["Offline"],
+        "repeatingPlans": null,
+        "planStrategy": {
+          "continuous": false,
+          "precondition": 0
+        }
+      },
+      "vehicle_4": {
+        "title": "black VanMoof",
+        "icon": "bike",
+        "capacity": 0.46,
+        "features": ["Offline"],
+        "repeatingPlans": null,
+        "planStrategy": {
+          "continuous": false,
+          "precondition": 0
+        }
+      }
+    },
+    "version": "0.317.1"
+  },
+  {
+    "loadpoints.2.chargePower": 4154.948
+  },
+  {
+    "loadpoints.0.chargePower": 3220
+  },
+  {
+    "grid": {
+      "name": "grid",
+      "power": -484.5635239657913
+    }
+  },
+  {
+    "loadpoints.1.chargePower": 0
+  },
+  {
+    "pvPower": 8359.512
+  },
+  {
+    "pvEnergy": 0
+  },
+  {
+    "pv": [
+      {
+        "name": "pv",
+        "power": 8359.511896856511
+      }
+    ]
+  },
+  {
+    "battery": {
+      "power": 0,
+      "capacity": 13.4,
+      "soc": 22,
+      "devices": [
+        {
+          "name": "battery",
+          "power": 0,
+          "capacity": 13.4,
+          "soc": 22,
+          "controllable": true
+        }
+      ]
+    }
+  },
+  {
+    "homePower": 500
+  },
+  {
+    "loadpoints.2.smartCostActive": false
+  },
+  {
+    "loadpoints.2.smartCostNextStart": null
+  },
+  {
+    "loadpoints.2.smartFeedInPriorityActive": false
+  },
+  {
+    "loadpoints.2.smartFeedInPriorityNextStart": null
+  },
+  {
+    "loadpoints.2.offeredCurrent": 6.278
+  },
+  {
+    "loadpoints.2.sessionEnergy": 89.429
+  },
+  {
+    "loadpoints.2.sessionSolarPercentage": 100
+  },
+  {
+    "loadpoints.2.sessionPricePerKWh": 0.08
+  },
+  {
+    "loadpoints.2.sessionPrice": 0.007154309597757044
+  },
+  {
+    "loadpoints.2.sessionCo2PerKWh": 0
+  },
+  {
+    "loadpoints.2.chargedEnergy": 89.429
+  },
+  {
+    "loadpoints.2.chargeDuration": 81
+  },
+  {
+    "loadpoints.2.todayEnergy": 99
+  },
+  {
+    "loadpoints.2.last24hEnergy": 0
+  },
+  {
+    "loadpoints.2.last7dEnergy": 0
+  },
+  {
+    "loadpoints.2.effectivePriority": 0
+  },
+  {
+    "loadpoints.2.effectivePlanId": 0
+  },
+  {
+    "loadpoints.2.effectivePlanTime": null
+  },
+  {
+    "loadpoints.2.effectivePlanSoc": 0
+  },
+  {
+    "loadpoints.2.effectivePlanStrategy": {
+      "continuous": false,
+      "precondition": 0
+    }
+  },
+  {
+    "loadpoints.2.effectiveMinCurrent": 6
+  },
+  {
+    "loadpoints.2.effectiveMaxCurrent": 16
+  },
+  {
+    "loadpoints.2.effectiveMinSoc": 0
+  },
+  {
+    "loadpoints.2.effectiveLimitSoc": 100
+  },
+  {
+    "loadpoints.2.vehicleWelcomeActive": false
+  },
+  {
+    "loadpoints.2.connected": true
+  },
+  {
+    "loadpoints.2.charging": true
+  },
+  {
+    "loadpoints.2.vehicleLimitSoc": 65
+  },
+  {
+    "loadpoints.2.vehicleSoc": 49.9
+  },
+  {
+    "loadpoints.2.vehicleLimitSoc": 65
+  },
+  {
+    "loadpoints.2.enabled": true
+  },
+  {
+    "loadpoints.2.mode": "smart"
+  },
+  {
+    "loadpoints.2.plan": null
+  },
+  {
+    "loadpoints.2.planProjectedStart": null
+  },
+  {
+    "loadpoints.2.planProjectedEnd": null
+  },
+  {
+    "loadpoints.2.planOverrun": 0
+  },
+  {
+    "loadpoints.2.minSocNotReached": false
+  },
+  {
+    "loadpoints.2.offeredCurrent": 6.724
+  },
+  {
+    "greenShareHome": 1
+  },
+  {
+    "greenShareLoadpoints": 1
+  },
+  {
+    "tariffGrid": 0.313
+  },
+  {
+    "tariffFeedIn": 0.08
+  },
+  {
+    "tariffCo2": 462
+  },
+  {
+    "tariffSolar": 7302
+  },
+  {
+    "tariffTemperature": 12
+  },
+  {
+    "tariffPriceHome": 0.08
+  },
+  {
+    "tariffCo2Home": 0
+  },
+  {
+    "tariffPriceLoadpoints": 0.08
+  },
+  {
+    "tariffCo2Loadpoints": 0
+  },
+  {
+    "batteryGridChargeActive": false
+  },
+  {
+    "batteryGridDischargeActive": false
+  },
+  {
+    "batteryGridDischargeActive": false
+  },
+  {
+    "loadpoints.0.suggestion": null
+  },
+  {
+    "loadpoints.1.suggestion": null
+  },
+  {
+    "loadpoints.2.suggestion": null
+  },
+  {
+    "loadpoints.2.chargePower": 3939.106
+  },
+  {
+    "loadpoints.0.chargePower": 3220
+  },
+  {
+    "grid": {
+      "name": "grid",
+      "power": -645.9655738686706
+    }
+  },
+  {
+    "loadpoints.1.chargePower": 0
+  },
+  {
+    "pvPower": 8305.072
+  },
+  {
+    "pvEnergy": 0
+  },
+  {
+    "pv": [
+      {
+        "name": "pv",
+        "power": 8305.071646727485
+      }
+    ]
+  },
+  {
+    "battery": {
+      "power": 0,
+      "capacity": 13.4,
+      "soc": 21.000000000000004,
+      "devices": [
+        {
+          "name": "battery",
+          "power": 0,
+          "capacity": 13.4,
+          "soc": 21,
+          "controllable": true
+        }
+      ]
+    }
+  },
+  {
+    "homePower": 500
+  },
+  {
+    "loadpoints.0.smartCostActive": false
+  },
+  {
+    "loadpoints.0.smartCostNextStart": null
+  },
+  {
+    "loadpoints.0.smartFeedInPriorityActive": false
+  },
+  {
+    "loadpoints.0.smartFeedInPriorityNextStart": null
+  },
+  {
+    "loadpoints.0.offeredCurrent": 14
+  },
+  {
+    "loadpoints.0.sessionEnergy": 88.555
+  },
+  {
+    "loadpoints.0.sessionSolarPercentage": 100
+  },
+  {
+    "loadpoints.0.sessionPricePerKWh": 0.08
+  },
+  {
+    "loadpoints.0.sessionPrice": 0.007084368042422222
+  },
+  {
+    "loadpoints.0.sessionCo2PerKWh": 0
+  },
+  {
+    "loadpoints.0.chargedEnergy": 88.555
+  },
+  {
+    "loadpoints.0.chargeDuration": 99
+  },
+  {
+    "loadpoints.0.todayEnergy": 89
+  },
+  {
+    "loadpoints.0.last24hEnergy": 0
+  },
+  {
+    "loadpoints.0.last7dEnergy": 0
+  },
+  {
+    "loadpoints.0.effectivePriority": 0
+  },
+  {
+    "loadpoints.0.effectivePlanId": 0
+  },
+  {
+    "loadpoints.0.effectivePlanTime": null
+  },
+  {
+    "loadpoints.0.effectivePlanSoc": 0
+  },
+  {
+    "loadpoints.0.effectivePlanStrategy": {
+      "continuous": false,
+      "precondition": 0
+    }
+  },
+  {
+    "loadpoints.0.effectiveMinCurrent": 6
+  },
+  {
+    "loadpoints.0.effectiveMaxCurrent": 16
+  },
+  {
+    "loadpoints.0.effectiveMinSoc": 0
+  },
+  {
+    "loadpoints.0.effectiveLimitSoc": 100
+  },
+  {
+    "loadpoints.0.vehicleWelcomeActive": false
+  },
+  {
+    "loadpoints.0.connected": true
+  },
+  {
+    "loadpoints.0.charging": true
+  },
+  {
+    "loadpoints.0.vehicleRange": 185
+  },
+  {
+    "loadpoints.0.vehicleSoc": 63.2
+  },
+  {
+    "loadpoints.0.chargeRemainingDuration": 21987
+  },
+  {
+    "loadpoints.0.chargeRemainingEnergy": 19049.412
+  },
+  {
+    "loadpoints.0.enabled": true
+  },
+  {
+    "loadpoints.0.mode": "smart"
+  },
+  {
+    "loadpoints.0.plan": null
+  },
+  {
+    "loadpoints.0.planProjectedStart": null
+  },
+  {
+    "loadpoints.0.planProjectedEnd": null
+  },
+  {
+    "loadpoints.0.planOverrun": 0
+  },
+  {
+    "loadpoints.0.minSocNotReached": false
+  },
+  {
+    "greenShareHome": 1
+  },
+  {
+    "greenShareLoadpoints": 1
+  },
+  {
+    "tariffGrid": 0.313
+  },
+  {
+    "tariffFeedIn": 0.08
+  },
+  {
+    "tariffCo2": 462
+  },
+  {
+    "tariffSolar": 7302
+  },
+  {
+    "tariffTemperature": 12
+  },
+  {
+    "tariffPriceHome": 0.08
+  },
+  {
+    "tariffCo2Home": 0
+  },
+  {
+    "tariffPriceLoadpoints": 0.08
+  },
+  {
+    "tariffCo2Loadpoints": 0
+  },
+  {
+    "batteryGridChargeActive": false
+  },
+  {
+    "batteryGridDischargeActive": false
+  },
+  {
+    "batteryGridDischargeActive": false
+  },
+  {
+    "loadpoints.0.suggestion": null
+  },
+  {
+    "loadpoints.1.suggestion": null
+  },
+  {
+    "loadpoints.2.suggestion": null
+  },
+  {
+    "loadpoints.2.chargePower": 3825.094
+  },
+  {
+    "loadpoints.0.chargePower": 3220
+  },
+  {
+    "loadpoints.1.chargePower": 0
+  },
+  {
+    "grid": {
+      "name": "grid",
+      "power": -916.4324295391034
+    }
+  },
+  {
+    "pvPower": 8461.526
+  },
+  {
+    "pvEnergy": 0
+  },
+  {
+    "pv": [
+      {
+        "name": "pv",
+        "power": 8461.526053437647
+      }
+    ]
+  },
+  {
+    "battery": {
+      "power": 0,
+      "capacity": 13.4,
+      "soc": 20,
+      "devices": [
+        {
+          "name": "battery",
+          "power": 0,
+          "capacity": 13.4,
+          "soc": 20,
+          "controllable": true
+        }
+      ]
+    }
+  },
+  {
+    "homePower": 500
+  },
+  {
+    "loadpoints.1.smartCostActive": false
+  },
+  {
+    "loadpoints.1.smartCostNextStart": null
+  },
+  {
+    "loadpoints.1.smartFeedInPriorityActive": false
+  },
+  {
+    "loadpoints.1.smartFeedInPriorityNextStart": null
+  },
+  {
+    "loadpoints.1.offeredCurrent": 0
+  },
+  {
+    "loadpoints.1.sessionEnergy": 0
+  },
+  {
+    "loadpoints.1.sessionSolarPercentage": 0
+  },
+  {
+    "loadpoints.1.sessionPricePerKWh": null
+  },
+  {
+    "loadpoints.1.sessionPrice": null
+  },
+  {
+    "loadpoints.1.sessionCo2PerKWh": null
+  },
+  {
+    "loadpoints.1.chargedEnergy": 0
+  },
+  {
+    "loadpoints.1.chargeDuration": 0
+  },
+  {
+    "loadpoints.1.todayEnergy": 0
+  },
+  {
+    "loadpoints.1.last24hEnergy": 0
+  },
+  {
+    "loadpoints.1.last7dEnergy": 0
+  },
+  {
+    "loadpoints.1.effectivePriority": 0
+  },
+  {
+    "loadpoints.1.effectivePlanId": 0
+  },
+  {
+    "loadpoints.1.effectivePlanTime": null
+  },
+  {
+    "loadpoints.1.effectivePlanSoc": 0
+  },
+  {
+    "loadpoints.1.effectivePlanStrategy": {
+      "continuous": false,
+      "precondition": 0
+    }
+  },
+  {
+    "loadpoints.1.effectiveMinCurrent": 6
+  },
+  {
+    "loadpoints.1.effectiveMaxCurrent": 16
+  },
+  {
+    "loadpoints.1.effectiveMinSoc": 0
+  },
+  {
+    "loadpoints.1.effectiveLimitSoc": 100
+  },
+  {
+    "loadpoints.1.vehicleWelcomeActive": false
+  },
+  {
+    "loadpoints.1.connected": true
+  },
+  {
+    "loadpoints.1.charging": false
+  },
+  {
+    "loadpoints.1.vehicleSoc": 21
+  },
+  {
+    "loadpoints.1.enabled": false
+  },
+  {
+    "loadpoints.1.mode": "off"
+  },
+  {
+    "loadpoints.1.plan": null
+  },
+  {
+    "loadpoints.1.planProjectedStart": null
+  },
+  {
+    "loadpoints.1.planProjectedEnd": null
+  },
+  {
+    "loadpoints.1.planOverrun": 0
+  },
+  {
+    "loadpoints.1.minSocNotReached": false
+  },
+  {
+    "greenShareHome": 1
+  },
+  {
+    "greenShareLoadpoints": 1
+  },
+  {
+    "tariffGrid": 0.313
+  },
+  {
+    "tariffFeedIn": 0.08
+  },
+  {
+    "tariffCo2": 462
+  },
+  {
+    "tariffSolar": 7302
+  },
+  {
+    "tariffTemperature": 12
+  },
+  {
+    "tariffPriceHome": 0.08
+  },
+  {
+    "tariffCo2Home": 0
+  },
+  {
+    "tariffPriceLoadpoints": 0.08
+  },
+  {
+    "tariffCo2Loadpoints": 0
+  },
+  {
+    "batteryGridChargeActive": false
+  },
+  {
+    "batteryGridDischargeActive": false
+  },
+  {
+    "batteryGridDischargeActive": false
+  },
+  {
+    "loadpoints.0.suggestion": null
+  },
+  {
+    "loadpoints.1.suggestion": null
+  },
+  {
+    "loadpoints.2.suggestion": null
+  },
+  {
+    "loadpoints.2.chargePower": 3809.954
+  },
+  {
+    "loadpoints.0.chargePower": 3220
+  },
+  {
+    "loadpoints.1.chargePower": 0
+  },
+  {
+    "grid": {
+      "name": "grid",
+      "power": -965.9753549875777
+    }
+  },
+  {
+    "pvPower": 8495.93
+  },
+  {
+    "pvEnergy": 0
+  },
+  {
+    "pv": [
+      {
+        "name": "pv",
+        "power": 8495.929503993215
+      }
+    ]
+  },
+  {
+    "battery": {
+      "power": 0,
+      "capacity": 13.4,
+      "soc": 19,
+      "devices": [
+        {
+          "name": "battery",
+          "power": 0,
+          "capacity": 13.4,
+          "soc": 19,
+          "controllable": true
+        }
+      ]
+    }
+  },
+  {
+    "homePower": 500
+  },
+  {
+    "loadpoints.2.smartCostActive": false
+  },
+  {
+    "loadpoints.2.smartCostNextStart": null
+  },
+  {
+    "loadpoints.2.smartFeedInPriorityActive": false
+  },
+  {
+    "loadpoints.2.smartFeedInPriorityNextStart": null
+  },
+  {
+    "loadpoints.2.offeredCurrent": 6.724
+  },
+  {
+    "loadpoints.2.sessionEnergy": 98.956
+  },
+  {
+    "loadpoints.2.sessionSolarPercentage": 100
+  },
+  {
+    "loadpoints.2.sessionPricePerKWh": 0.08
+  },
+  {
+    "loadpoints.2.sessionPrice": 0.007916445477592564
+  },
+  {
+    "loadpoints.2.sessionCo2PerKWh": 0
+  },
+  {
+    "loadpoints.2.chargedEnergy": 98.956
+  },
+  {
+    "loadpoints.2.chargeDuration": 90
+  },
+  {
+    "loadpoints.2.todayEnergy": 109
+  },
+  {
+    "loadpoints.2.last24hEnergy": 0
+  },
+  {
+    "loadpoints.2.last7dEnergy": 0
+  },
+  {
+    "loadpoints.2.effectivePriority": 0
+  },
+  {
+    "loadpoints.2.effectivePlanId": 0
+  },
+  {
+    "loadpoints.2.effectivePlanTime": null
+  },
+  {
+    "loadpoints.2.effectivePlanSoc": 0
+  },
+  {
+    "loadpoints.2.effectivePlanStrategy": {
+      "continuous": false,
+      "precondition": 0
+    }
+  },
+  {
+    "loadpoints.2.effectiveMinCurrent": 6
+  },
+  {
+    "loadpoints.2.effectiveMaxCurrent": 16
+  },
+  {
+    "loadpoints.2.effectiveMinSoc": 0
+  },
+  {
+    "loadpoints.2.effectiveLimitSoc": 100
+  },
+  {
+    "loadpoints.2.vehicleWelcomeActive": false
+  },
+  {
+    "loadpoints.2.connected": true
+  },
+  {
+    "loadpoints.2.charging": true
+  },
+  {
+    "loadpoints.2.vehicleLimitSoc": 65
+  },
+  {
+    "loadpoints.2.vehicleSoc": 50.1
+  },
+  {
+    "loadpoints.2.vehicleLimitSoc": 65
+  },
+  {
+    "loadpoints.2.enabled": true
+  },
+  {
+    "loadpoints.2.mode": "smart"
+  },
+  {
+    "loadpoints.2.plan": null
+  },
+  {
+    "loadpoints.2.planProjectedStart": null
+  },
+  {
+    "loadpoints.2.planProjectedEnd": null
+  },
+  {
+    "loadpoints.2.planOverrun": 0
+  },
+  {
+    "loadpoints.2.minSocNotReached": false
+  },
+  {
+    "loadpoints.2.offeredCurrent": 6.922
+  },
+  {
+    "greenShareHome": 1
+  },
+  {
+    "greenShareLoadpoints": 1
+  },
+  {
+    "tariffGrid": 0.313
+  },
+  {
+    "tariffFeedIn": 0.08
+  },
+  {
+    "tariffCo2": 462
+  },
+  {
+    "tariffSolar": 7302
+  },
+  {
+    "tariffTemperature": 12
+  },
+  {
+    "tariffPriceHome": 0.08
+  },
+  {
+    "tariffCo2Home": 0
+  },
+  {
+    "tariffPriceLoadpoints": 0.08
+  },
+  {
+    "tariffCo2Loadpoints": 0
+  },
+  {
+    "batteryGridChargeActive": false
+  },
+  {
+    "batteryGridDischargeActive": false
+  },
+  {
+    "batteryGridDischargeActive": false
+  },
+  {
+    "loadpoints.0.suggestion": null
+  },
+  {
+    "loadpoints.1.suggestion": null
+  },
+  {
+    "loadpoints.2.suggestion": null
+  }
+]

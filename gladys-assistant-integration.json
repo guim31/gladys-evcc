@@ -1,177 +1,649 @@
 {
   "manifest_version": 1,
   "type": "device",
-  "name": "Demo Devices Template",
+  "name": "evcc",
   "description": {
-    "en": "Starter template showing sensors, a switch, a dimmable light and a smart plug.",
-    "fr": "Template de démarrage : capteurs, interrupteur, lampe variable et prise connectée."
+    "en": "Solar EV charging with evcc: energy flow, loadpoints, vehicles, modes and limits.",
+    "fr": "Recharge solaire avec evcc : flux d'énergie, points de charge, véhicules, modes et limites.",
+    "de": "Solarladen mit evcc: Energiefluss, Ladepunkte, Fahrzeuge, Modi und Limits.",
+    "es": "Carga solar con evcc: flujo de energía, puntos de carga, vehículos, modos y límites."
   },
   "version": "1.0.0",
-  "docker_image": "ghcr.io/gladysassistant/integration-template-js:1.0.0",
+  "docker_image": "ghcr.io/guim31/gladys-evcc:1.0.0",
   "gladys_version": ">=5.1.0",
-  "cover_image": "https://raw.githubusercontent.com/GladysAssistant/integration-template-js/master/cover.png",
-  "categories": ["lighting", "security", "environment"],
-  "transports": ["local", "cloud"],
+  "cover_image": "https://raw.githubusercontent.com/guim31/gladys-evcc/main/cover.png",
+  "categories": ["energy"],
+  "transports": ["local"],
   "config_schema": [
     {
       "key": "intro",
       "type": "section",
-      "label": { "en": "Getting started", "fr": "Pour commencer" },
+      "label": {
+        "en": "Connect your evcc",
+        "fr": "Connecter votre evcc",
+        "de": "Verbinde dein evcc",
+        "es": "Conecte su evcc"
+      },
       "description": {
-        "en": "The demo weather station reads real data from the free Open-Meteo API: pick the coordinates to observe. No account, no API key.",
-        "fr": "La station météo de démonstration lit de vraies données via l'API gratuite Open-Meteo : choisissez les coordonnées à observer. Pas de compte, pas de clé d'API."
+        "en": "Enter the address of evcc as you open it in your browser (port 7070 by default). The integration follows evcc live through its websocket. The admin password is only needed if your evcc asks for it to change a mode or a limit.",
+        "fr": "Saisissez l'adresse d'evcc telle que vous l'ouvrez dans votre navigateur (port 7070 par défaut). L'intégration suit evcc en direct par son websocket. Le mot de passe administrateur n'est utile que si votre evcc le demande pour changer un mode ou une limite.",
+        "de": "Gib die Adresse von evcc ein, wie du sie im Browser öffnest (standardmäßig Port 7070). Die Integration folgt evcc live über seinen Websocket. Das Admin-Passwort brauchst du nur, wenn dein evcc es zum Ändern eines Modus oder Limits verlangt.",
+        "es": "Introduzca la dirección de evcc tal como la abre en su navegador (puerto 7070 por defecto). La integración sigue evcc en directo por su websocket. La contraseña de administrador solo hace falta si su evcc la pide para cambiar un modo o un límite."
       },
       "links": [
         {
-          "url": "https://open-meteo.com/en/docs",
-          "label": { "en": "Open-Meteo documentation", "fr": "Documentation Open-Meteo" }
+          "url": "https://docs.evcc.io/en/docs/reference/api",
+          "label": {
+            "en": "evcc API",
+            "fr": "API d'evcc",
+            "de": "evcc-API",
+            "es": "API de evcc"
+          }
         }
       ]
     },
     {
-      "key": "latitude",
-      "type": "number",
-      "label": { "en": "Latitude", "fr": "Latitude" },
-      "description": {
-        "en": "Latitude used for the demo weather sensor.",
-        "fr": "Latitude utilisée par le capteur météo de démonstration."
+      "key": "url",
+      "type": "string",
+      "label": {
+        "en": "evcc address",
+        "fr": "Adresse d'evcc",
+        "de": "Adresse von evcc",
+        "es": "Dirección de evcc"
       },
-      "placeholder": { "en": "e.g. 48.8566", "fr": "ex. 48.8566" },
+      "placeholder": {
+        "en": "e.g. http://192.168.1.20:7070",
+        "fr": "ex. http://192.168.1.20:7070",
+        "de": "z. B. http://192.168.1.20:7070",
+        "es": "p. ej. http://192.168.1.20:7070"
+      },
+      "description": {
+        "en": "Without a port, 7070 is used. A path is allowed behind a reverse proxy.",
+        "fr": "Sans port, 7070 est utilisé. Un chemin est accepté derrière un proxy inverse.",
+        "de": "Ohne Port wird 7070 verwendet. Hinter einem Reverse-Proxy ist ein Pfad erlaubt.",
+        "es": "Sin puerto, se usa el 7070. Se admite una ruta detrás de un proxy inverso."
+      },
       "required": true,
-      "default": 48.8566,
-      "min": -90,
-      "max": 90
+      "default": ""
     },
     {
-      "key": "longitude",
-      "type": "number",
-      "label": { "en": "Longitude", "fr": "Longitude" },
-      "description": {
-        "en": "Longitude used for the demo weather sensor.",
-        "fr": "Longitude utilisée par le capteur météo de démonstration."
+      "key": "password",
+      "type": "secret",
+      "label": {
+        "en": "Admin password (optional)",
+        "fr": "Mot de passe administrateur (facultatif)",
+        "de": "Admin-Passwort (optional)",
+        "es": "Contraseña de administrador (opcional)"
       },
-      "placeholder": { "en": "e.g. 2.3522", "fr": "ex. 2.3522" },
-      "required": true,
-      "default": 2.3522,
-      "min": -180,
-      "max": 180
+      "description": {
+        "en": "Recent evcc versions change modes and limits without it.",
+        "fr": "Les versions récentes d'evcc changent modes et limites sans lui.",
+        "de": "Neuere evcc-Versionen ändern Modi und Limits ohne Passwort.",
+        "es": "Las versiones recientes de evcc cambian modos y límites sin ella."
+      },
+      "required": false
     },
     {
-      "key": "unit",
+      "key": "language",
       "type": "select",
-      "label": { "en": "Temperature unit", "fr": "Unité de température" },
-      "required": false,
-      "default": "celsius",
-      "options": [
-        { "value": "celsius", "label": { "en": "Celsius", "fr": "Celsius" } },
-        { "value": "fahrenheit", "label": { "en": "Fahrenheit", "fr": "Fahrenheit" } }
-      ]
-    },
-    {
-      "key": "poll_frequency",
-      "type": "number",
-      "label": { "en": "Refresh interval (s)", "fr": "Intervalle de rafraîchissement (s)" },
-      "description": {
-        "en": "How often sensors are polled, in seconds (one minute minimum).",
-        "fr": "Fréquence d'interrogation des capteurs, en secondes (une minute minimum)."
+      "label": {
+        "en": "Language of the feature names",
+        "fr": "Langue des noms de fonctionnalités",
+        "de": "Sprache der Funktionsnamen",
+        "es": "Idioma de los nombres de funciones"
       },
       "required": false,
-      "default": 300,
-      "min": 60,
-      "max": 3600
+      "default": "fr",
+      "options": [
+        {
+          "value": "en",
+          "label": { "en": "English", "fr": "Anglais", "de": "Englisch", "es": "Inglés" }
+        },
+        {
+          "value": "fr",
+          "label": { "en": "French", "fr": "Français", "de": "Französisch", "es": "Francés" }
+        },
+        {
+          "value": "de",
+          "label": { "en": "German", "fr": "Allemand", "de": "Deutsch", "es": "Alemán" }
+        },
+        {
+          "value": "es",
+          "label": { "en": "Spanish", "fr": "Espagnol", "de": "Spanisch", "es": "Español" }
+        }
+      ]
     }
   ],
   "actions": [
     {
-      "key": "test_weather",
-      "label": { "en": "Test the weather provider", "fr": "Tester le fournisseur météo" },
-      "timeout_seconds": 30
-    },
-    {
-      "key": "identify",
-      "label": { "en": "Identify a device", "fr": "Identifier un appareil" },
-      "fields": [
-        {
-          "key": "device",
-          "type": "select",
-          "source": "devices",
-          "label": { "en": "Device", "fr": "Appareil" },
-          "required": true
-        }
-      ]
+      "key": "test_connection",
+      "label": {
+        "en": "Test the connection",
+        "fr": "Tester la connexion",
+        "de": "Verbindung testen",
+        "es": "Probar la conexión"
+      },
+      "timeout_seconds": 20
     }
   ],
   "scene_triggers": [
     {
-      "key": "motion_detected",
-      "label": { "en": "Motion detected", "fr": "Mouvement détecté" },
+      "key": "vehicle_connected",
+      "label": {
+        "en": "Vehicle plugged in",
+        "fr": "Véhicule branché",
+        "de": "Fahrzeug angesteckt",
+        "es": "Vehículo conectado"
+      },
       "description": {
-        "en": "A demo motion sensor saw a person or an animal move.",
-        "fr": "Un détecteur de démonstration a vu bouger une personne ou un animal."
+        "en": "A vehicle is plugged into a loadpoint (once evcc identified it, 2 min at most).",
+        "fr": "Un véhicule est branché sur un point de charge (une fois identifié par evcc, 2 min au plus).",
+        "de": "Ein Fahrzeug wird an einem Ladepunkt angesteckt (sobald evcc es erkennt, höchstens 2 Min.).",
+        "es": "Un vehículo se conecta a un punto de carga (una vez identificado por evcc, 2 min como máximo)."
       },
       "fields": [
         {
           "key": "device",
           "type": "select",
           "source": "devices",
-          "label": { "en": "Sensor", "fr": "Détecteur" }
+          "label": {
+            "en": "Loadpoint",
+            "fr": "Point de charge",
+            "de": "Ladepunkt",
+            "es": "Punto de carga"
+          }
         },
         {
-          "key": "target",
-          "type": "multi_select",
-          "label": { "en": "What moved", "fr": "Ce qui a bougé" },
+          "key": "vehicle_device",
+          "type": "select",
+          "source": "devices",
+          "label": { "en": "Vehicle", "fr": "Véhicule", "de": "Fahrzeug", "es": "Vehículo" }
+        }
+      ],
+      "variables": [
+        {
+          "key": "loadpoint",
+          "type": "string",
+          "label": {
+            "en": "Loadpoint",
+            "fr": "Point de charge",
+            "de": "Ladepunkt",
+            "es": "Punto de carga"
+          }
+        },
+        {
+          "key": "vehicle",
+          "type": "string",
+          "label": { "en": "Vehicle", "fr": "Véhicule", "de": "Fahrzeug", "es": "Vehículo" }
+        }
+      ]
+    },
+    {
+      "key": "vehicle_disconnected",
+      "label": {
+        "en": "Vehicle unplugged",
+        "fr": "Véhicule débranché",
+        "de": "Fahrzeug abgesteckt",
+        "es": "Vehículo desconectado"
+      },
+      "description": {
+        "en": "A vehicle is unplugged, with the energy of its session.",
+        "fr": "Un véhicule est débranché, avec l'énergie de sa session.",
+        "de": "Ein Fahrzeug wird abgesteckt, mit der Energie seines Ladevorgangs.",
+        "es": "Un vehículo se desconecta, con la energía de su sesión."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Loadpoint",
+            "fr": "Point de charge",
+            "de": "Ladepunkt",
+            "es": "Punto de carga"
+          }
+        },
+        {
+          "key": "vehicle_device",
+          "type": "select",
+          "source": "devices",
+          "label": { "en": "Vehicle", "fr": "Véhicule", "de": "Fahrzeug", "es": "Vehículo" }
+        }
+      ],
+      "variables": [
+        {
+          "key": "loadpoint",
+          "type": "string",
+          "label": {
+            "en": "Loadpoint",
+            "fr": "Point de charge",
+            "de": "Ladepunkt",
+            "es": "Punto de carga"
+          }
+        },
+        {
+          "key": "vehicle",
+          "type": "string",
+          "label": { "en": "Vehicle", "fr": "Véhicule", "de": "Fahrzeug", "es": "Vehículo" }
+        },
+        {
+          "key": "energy_kwh",
+          "type": "number",
+          "label": {
+            "en": "Energy charged (kWh)",
+            "fr": "Énergie chargée (kWh)",
+            "de": "Geladene Energie (kWh)",
+            "es": "Energía cargada (kWh)"
+          }
+        },
+        {
+          "key": "duration_minutes",
+          "type": "number",
+          "label": {
+            "en": "Time plugged in (minutes)",
+            "fr": "Durée branché (minutes)",
+            "de": "Angesteckt (Minuten)",
+            "es": "Tiempo conectado (minutos)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "charging_started",
+      "label": {
+        "en": "Charging started",
+        "fr": "Charge démarrée",
+        "de": "Laden gestartet",
+        "es": "Carga iniciada"
+      },
+      "description": {
+        "en": "A charge starts. A short pause (clouds) is not a new charge.",
+        "fr": "Une charge démarre. Une courte pause (nuages) n'est pas une nouvelle charge.",
+        "de": "Ein Ladevorgang beginnt. Eine kurze Pause (Wolken) ist kein neuer Ladevorgang.",
+        "es": "Una carga empieza. Una pausa corta (nubes) no es una carga nueva."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Loadpoint",
+            "fr": "Point de charge",
+            "de": "Ladepunkt",
+            "es": "Punto de carga"
+          }
+        },
+        {
+          "key": "vehicle_device",
+          "type": "select",
+          "source": "devices",
+          "label": { "en": "Vehicle", "fr": "Véhicule", "de": "Fahrzeug", "es": "Vehículo" }
+        }
+      ],
+      "variables": [
+        {
+          "key": "loadpoint",
+          "type": "string",
+          "label": {
+            "en": "Loadpoint",
+            "fr": "Point de charge",
+            "de": "Ladepunkt",
+            "es": "Punto de carga"
+          }
+        },
+        {
+          "key": "vehicle",
+          "type": "string",
+          "label": { "en": "Vehicle", "fr": "Véhicule", "de": "Fahrzeug", "es": "Vehículo" }
+        },
+        {
+          "key": "mode",
+          "type": "string",
+          "label": {
+            "en": "Mode (off, pv, minpv, now)",
+            "fr": "Mode (off, pv, minpv, now)",
+            "de": "Modus (off, pv, minpv, now)",
+            "es": "Modo (off, pv, minpv, now)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "charging_finished",
+      "label": {
+        "en": "Charging finished",
+        "fr": "Charge terminée",
+        "de": "Laden beendet",
+        "es": "Carga terminada"
+      },
+      "description": {
+        "en": "A charge stopped for 10 minutes, or the vehicle was unplugged.",
+        "fr": "Une charge est arrêtée depuis 10 minutes, ou le véhicule a été débranché.",
+        "de": "Ein Ladevorgang steht seit 10 Minuten still, oder das Fahrzeug wurde abgesteckt.",
+        "es": "Una carga lleva 10 minutos parada, o el vehículo se desconectó."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Loadpoint",
+            "fr": "Point de charge",
+            "de": "Ladepunkt",
+            "es": "Punto de carga"
+          }
+        },
+        {
+          "key": "vehicle_device",
+          "type": "select",
+          "source": "devices",
+          "label": { "en": "Vehicle", "fr": "Véhicule", "de": "Fahrzeug", "es": "Vehículo" }
+        }
+      ],
+      "variables": [
+        {
+          "key": "loadpoint",
+          "type": "string",
+          "label": {
+            "en": "Loadpoint",
+            "fr": "Point de charge",
+            "de": "Ladepunkt",
+            "es": "Punto de carga"
+          }
+        },
+        {
+          "key": "vehicle",
+          "type": "string",
+          "label": { "en": "Vehicle", "fr": "Véhicule", "de": "Fahrzeug", "es": "Vehículo" }
+        },
+        {
+          "key": "energy_kwh",
+          "type": "number",
+          "label": {
+            "en": "Energy charged (kWh)",
+            "fr": "Énergie chargée (kWh)",
+            "de": "Geladene Energie (kWh)",
+            "es": "Energía cargada (kWh)"
+          }
+        },
+        {
+          "key": "duration_minutes",
+          "type": "number",
+          "label": {
+            "en": "Charging time (minutes)",
+            "fr": "Durée de charge (minutes)",
+            "de": "Ladedauer (Minuten)",
+            "es": "Tiempo de carga (minutos)"
+          }
+        },
+        {
+          "key": "solar_percent",
+          "type": "number",
+          "label": {
+            "en": "Solar share (%)",
+            "fr": "Part solaire (%)",
+            "de": "Solaranteil (%)",
+            "es": "Parte solar (%)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "mode_changed",
+      "label": {
+        "en": "Charging mode changed",
+        "fr": "Mode de charge changé",
+        "de": "Lademodus geändert",
+        "es": "Modo de carga cambiado"
+      },
+      "description": {
+        "en": "The mode of a loadpoint changed, in evcc or from Gladys.",
+        "fr": "Le mode d'un point de charge a changé, dans evcc ou depuis Gladys.",
+        "de": "Der Modus eines Ladepunkts hat sich geändert, in evcc oder über Gladys.",
+        "es": "El modo de un punto de carga cambió, en evcc o desde Gladys."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Loadpoint",
+            "fr": "Point de charge",
+            "de": "Ladepunkt",
+            "es": "Punto de carga"
+          }
+        },
+        {
+          "key": "mode",
+          "type": "select",
+          "label": {
+            "en": "New mode",
+            "fr": "Nouveau mode",
+            "de": "Neuer Modus",
+            "es": "Modo nuevo"
+          },
           "options": [
-            { "value": "person", "label": { "en": "Person", "fr": "Personne" } },
-            { "value": "animal", "label": { "en": "Animal", "fr": "Animal" } }
+            {
+              "value": "off",
+              "label": { "en": "Off", "fr": "Arrêt", "de": "Aus", "es": "Apagado" }
+            },
+            {
+              "value": "pv",
+              "label": { "en": "Solar", "fr": "Solaire", "de": "PV", "es": "Solar" }
+            },
+            {
+              "value": "minpv",
+              "label": {
+                "en": "Min + solar",
+                "fr": "Min + solaire",
+                "de": "Min + PV",
+                "es": "Mín + solar"
+              }
+            },
+            {
+              "value": "now",
+              "label": { "en": "Fast", "fr": "Rapide", "de": "Schnell", "es": "Rápido" }
+            }
           ]
         }
       ],
       "variables": [
         {
-          "key": "target",
+          "key": "loadpoint",
           "type": "string",
-          "label": { "en": "What moved", "fr": "Ce qui a bougé" }
+          "label": {
+            "en": "Loadpoint",
+            "fr": "Point de charge",
+            "de": "Ladepunkt",
+            "es": "Punto de carga"
+          }
+        },
+        {
+          "key": "mode_label",
+          "type": "string",
+          "label": {
+            "en": "New mode (name)",
+            "fr": "Nouveau mode (nom)",
+            "de": "Neuer Modus (Name)",
+            "es": "Modo nuevo (nombre)"
+          }
+        },
+        {
+          "key": "previous_mode",
+          "type": "string",
+          "label": {
+            "en": "Previous mode (off, pv, minpv, now)",
+            "fr": "Mode précédent (off, pv, minpv, now)",
+            "de": "Vorheriger Modus (off, pv, minpv, now)",
+            "es": "Modo anterior (off, pv, minpv, now)"
+          }
         }
       ]
     }
   ],
   "scene_actions": [
     {
-      "key": "identify_device",
-      "label": { "en": "Identify a device", "fr": "Identifier un appareil" },
-      "description": {
-        "en": "Make a device signal itself (the demo light blinks).",
-        "fr": "Fait se signaler un appareil (la lampe de démonstration clignote)."
+      "key": "set_mode",
+      "label": {
+        "en": "Set the charging mode",
+        "fr": "Changer le mode de charge",
+        "de": "Lademodus einstellen",
+        "es": "Cambiar el modo de carga"
       },
-      "timeout_seconds": 15,
+      "description": {
+        "en": "Off, solar, min + solar or fast, on an evcc loadpoint.",
+        "fr": "Arrêt, solaire, min + solaire ou rapide, sur un point de charge evcc.",
+        "de": "Aus, PV, Min + PV oder Schnell, an einem evcc-Ladepunkt.",
+        "es": "Apagado, solar, mín + solar o rápido, en un punto de carga evcc."
+      },
+      "timeout_seconds": 20,
       "fields": [
         {
           "key": "device",
           "type": "select",
           "source": "devices",
-          "label": { "en": "Device", "fr": "Appareil" },
+          "label": {
+            "en": "Loadpoint",
+            "fr": "Point de charge",
+            "de": "Ladepunkt",
+            "es": "Punto de carga"
+          },
           "required": true
-        }
-      ],
-      "outputs": [
+        },
         {
-          "key": "signalled",
-          "type": "boolean",
-          "label": { "en": "Device signalled", "fr": "Appareil signalé" }
+          "key": "mode",
+          "type": "select",
+          "label": { "en": "Mode", "fr": "Mode", "de": "Modus", "es": "Modo" },
+          "required": true,
+          "default": "pv",
+          "options": [
+            {
+              "value": "off",
+              "label": { "en": "Off", "fr": "Arrêt", "de": "Aus", "es": "Apagado" }
+            },
+            {
+              "value": "pv",
+              "label": { "en": "Solar", "fr": "Solaire", "de": "PV", "es": "Solar" }
+            },
+            {
+              "value": "minpv",
+              "label": {
+                "en": "Min + solar",
+                "fr": "Min + solaire",
+                "de": "Min + PV",
+                "es": "Mín + solar"
+              }
+            },
+            {
+              "value": "now",
+              "label": { "en": "Fast", "fr": "Rapide", "de": "Schnell", "es": "Rápido" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "set_limit",
+      "label": {
+        "en": "Set a charge limit",
+        "fr": "Régler une limite de charge",
+        "de": "Ladelimit einstellen",
+        "es": "Fijar un límite de carga"
+      },
+      "description": {
+        "en": "Battery level (%) of a loadpoint or a vehicle, or energy (kWh) of a loadpoint. 0 removes it.",
+        "fr": "Niveau de batterie (%) d'un point de charge ou d'un véhicule, ou énergie (kWh) d'un point de charge. 0 la retire.",
+        "de": "Batteriestand (%) eines Ladepunkts oder Fahrzeugs, oder Energie (kWh) eines Ladepunkts. 0 entfernt es.",
+        "es": "Nivel de batería (%) de un punto de carga o de un vehículo, o energía (kWh) de un punto de carga. 0 lo quita."
+      },
+      "timeout_seconds": 20,
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Loadpoint or vehicle",
+            "fr": "Point de charge ou véhicule",
+            "de": "Ladepunkt oder Fahrzeug",
+            "es": "Punto de carga o vehículo"
+          },
+          "required": true
+        },
+        {
+          "key": "limit_type",
+          "type": "select",
+          "label": {
+            "en": "Limit",
+            "fr": "Limite",
+            "de": "Limit",
+            "es": "Límite"
+          },
+          "required": true,
+          "default": "soc",
+          "options": [
+            {
+              "value": "soc",
+              "label": {
+                "en": "Battery level (%)",
+                "fr": "Niveau de batterie (%)",
+                "de": "Batteriestand (%)",
+                "es": "Nivel de batería (%)"
+              }
+            },
+            {
+              "value": "energy",
+              "label": {
+                "en": "Energy (kWh)",
+                "fr": "Énergie (kWh)",
+                "de": "Energie (kWh)",
+                "es": "Energía (kWh)"
+              }
+            }
+          ]
+        },
+        {
+          "key": "value",
+          "type": "number",
+          "label": { "en": "Value", "fr": "Valeur", "de": "Wert", "es": "Valor" },
+          "required": true,
+          "default": 80,
+          "min": 0,
+          "max": 200
         }
       ]
     }
   ],
   "widgets": [
     {
-      "key": "demo_status",
-      "label": { "en": "Demo status", "fr": "État de la démo" },
+      "key": "evcc",
+      "label": { "en": "evcc", "fr": "evcc", "de": "evcc", "es": "evcc" },
       "description": {
-        "en": "Live temperature and plug power, plug connection and observed location.",
-        "fr": "Température et puissance en direct, connexion de la prise, position observée."
+        "en": "Energy flow, loadpoints and the charging mode buttons.",
+        "fr": "Flux d'énergie, points de charge et boutons de mode de charge.",
+        "de": "Energiefluss, Ladepunkte und die Lademodus-Tasten.",
+        "es": "Flujo de energía, puntos de carga y botones de modo de carga."
       },
-      "icon": "activity",
-      "action_timeout_seconds": 15
+      "icon": "battery-charging",
+      "action_timeout_seconds": 20,
+      "settings": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Loadpoint of the buttons",
+            "fr": "Point de charge des boutons",
+            "de": "Ladepunkt der Tasten",
+            "es": "Punto de carga de los botones"
+          },
+          "required": false
+        }
+      ]
     }
   ]
 }
