@@ -39,6 +39,7 @@ export const DEFAULT_TIMINGS = {
   // Frames of one evcc cycle arrive together, one key each: the state is
   // read once the burst is over, so an event never sees half a cycle.
   processDelay: 250,
+  processMaxWait: 2_000,
   flushDelay: 1_000,
   minFlushGap: 5_000,
   // Checks the end of charges (quiet period) and the vehicle identification.
@@ -184,10 +185,13 @@ export class Hub {
 
   #disconnect() {
     this.generation += 1;
-    this.link?.stop();
-    this.link?.removeAllListeners();
+    // Detached before stop(): its `close` event must not start a read with
+    // the old client (an emptied address would come back "online").
+    const link = this.link;
     this.link = null;
     this.client = null;
+    link?.removeAllListeners();
+    link?.stop();
     this.raw = null;
     this.tracker.reset();
     clearTimeout(this.restTimer);
@@ -230,13 +234,22 @@ export class Hub {
     }
     this.problems.recover('read', 'evcc answers again');
     this.#setStatus('online');
+    // Debounced: re-armed by every frame, but never later than
+    // processMaxWait after the first frame of the burst.
+    const now = this.now();
     if (!this.processTimer) {
-      this.processTimer = setTimeout(() => {
-        this.processTimer = null;
-        this.#process();
-      }, this.timings.processDelay);
-      this.processTimer.unref?.();
+      this.burstStart = now;
     }
+    clearTimeout(this.processTimer);
+    const wait = Math.min(
+      this.timings.processDelay,
+      Math.max(0, this.burstStart + this.timings.processMaxWait - now),
+    );
+    this.processTimer = setTimeout(() => {
+      this.processTimer = null;
+      this.#process();
+    }, wait);
+    this.processTimer.unref?.();
   }
 
   #scheduleRest() {
@@ -279,7 +292,10 @@ export class Hub {
         return false;
       }
       const kind = err instanceof EvccError ? err.kind : 'unreachable';
-      this.problems.fail('read', `Cannot read evcc at ${this.config.url}: ${err.message}`);
+      // One line per kind of outage: the detail (timeout, EHOSTUNREACH...)
+      // may alternate between attempts, it stays at debug level.
+      logger.debug(`Cannot read evcc: ${err.message}`);
+      this.problems.fail('read', `Cannot read evcc at ${this.config.url} (${kind})`);
       if (!this.live) {
         this.tracker.reset();
         this.#setStatus(
@@ -655,7 +671,9 @@ export class Hub {
               snapshot.loadpoints.length,
               snapshot.vehicles.length,
             )
-          : table.failed,
+          : ['unauthorized', 'invalidAnswer'].includes(this.status)
+            ? STATUS_TEXT[language][this.status]
+            : table.failed,
       ]),
     );
   }

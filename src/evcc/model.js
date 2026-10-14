@@ -34,7 +34,7 @@ export const CHARGING_STATE = {
 // sandbox), others hold credentials of evcc's own settings (MQTT, InfluxDB,
 // messaging, EEBUS certificate) that have nothing to do in this process.
 const IGNORED =
-  /^(forecast|eebus|mqtt|influx|messaging|messagingEvents|shm|hems|ocpp|modbusproxy|sponsor|network|remote|releaseNotes|tariffs|statistics)(\.|$)/;
+  /^(forecast|eebus|mqtt|influx|messaging|messagingEvents|shm|hems|ocpp\w*|modbusproxy|sponsor|network|remote|releaseNotes|tariffs|statistics)(\.|$)/;
 
 /** The raw state of /api/state, unwrapped (evcc < 0.200 answers `{ result }`). */
 export function unwrapState(body) {

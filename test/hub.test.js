@@ -357,3 +357,28 @@ test('a vehicle never identified is announced after the delay', async (t) => {
   assert.equal(event.data.vehicle, '');
   assert.equal(event.data.vehicle_device, '');
 });
+
+test('emptying the address while connected says so, and evcc is no longer read', async (t) => {
+  const world = await createWorld();
+  t.after(() => world.app.stop());
+  const requests = world.server.requests.length;
+  await world.fake.configUpdated({ url: '' });
+  await new Promise((resolve) => setTimeout(resolve, 120));
+  assert.equal(world.hub.status, 'none');
+  assert.equal(world.fake.connectionStatus.connected, false);
+  assert.equal(world.server.requests.length, requests, 'no read with the old client');
+});
+
+test('unplugged: the time plugged in falls back on our own clock', async (t) => {
+  const world = await createWorld({ sessionTimings: SESSION });
+  t.after(() => world.app.stop());
+  world.server.setLoadpoint(1, { connected: false });
+  await flushed(world);
+  world.server.setLoadpoint(1, { connected: true });
+  await flushed(world);
+  world.server.setLoadpoint(1, { connected: false, connectedDuration: 0 });
+  await flushed(world);
+  const event = world.fake.sceneEvents.at(-1);
+  assert.equal(event.key, 'vehicle_disconnected');
+  assert.equal(typeof event.data.duration_minutes, 'number');
+});

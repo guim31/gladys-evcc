@@ -16,6 +16,7 @@ import { createEvcc, network, settle, until } from './fakeEvcc.js';
 export const FAST_TIMINGS = {
   restInterval: 40,
   processDelay: 2,
+  processMaxWait: 20,
   flushDelay: 5,
   minFlushGap: 10,
   tickInterval: 20,

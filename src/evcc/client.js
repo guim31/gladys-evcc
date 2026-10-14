@@ -12,7 +12,9 @@
 
 import { unwrapState } from './model.js';
 
-export const REQUEST_TIMEOUT_MS = 10_000;
+// A command may take three requests (401, login, retry): 18 s at worst, within
+// the 20 s Gladys gives an action.
+export const REQUEST_TIMEOUT_MS = 6_000;
 // The state of a large installation stays far below this; the cap protects
 // the 256 MB sandbox from a wrong address answering an endless body.
 const MAX_BODY_BYTES = 2 * 1024 * 1024;

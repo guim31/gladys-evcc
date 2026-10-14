@@ -78,6 +78,7 @@ export class SessionTracker {
 
       if (lp.connected && !tracked.connected) {
         tracked.pluggedAt = now;
+        tracked.connectedSince = now;
       }
       // A charge starting tells the vehicle is there, identified or not.
       events.push(...this.#identified(tracked, lp, now, lp.charging));
@@ -106,7 +107,13 @@ export class SessionTracker {
           tracked.inCharge = false;
           tracked.stoppedAt = null;
         }
-        events.push({ type: 'disconnected', loadpoint: mergeSession(lp, tracked.last) });
+        const session = mergeSession(lp, tracked.last);
+        // evcc's connectedDuration stays 0 on some setups: our own clock then.
+        if (!session.connectedDuration && tracked.connectedSince) {
+          session.connectedDuration = (now - tracked.connectedSince) / 1000;
+        }
+        tracked.connectedSince = null;
+        events.push({ type: 'disconnected', loadpoint: session });
       }
 
       tracked.connected = lp.connected;

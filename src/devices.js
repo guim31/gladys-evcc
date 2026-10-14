@@ -404,7 +404,11 @@ export function buildStates(gladys, snapshot, structure, language) {
         lp.charging && lp.remainingDuration !== null ? Math.round(lp.remainingDuration / 60) : 0,
       );
       l.value('limit_soc', lp.effectiveLimitSoc ?? lp.limitSoc);
-      l.text('vehicle', lp.connected ? (lp.vehicleTitle ?? noVehicle) : noVehicle);
+      const title =
+        lp.vehicleTitle ??
+        structure.vehicles.find((vehicle) => vehicle.name === lp.vehicleName)?.title ??
+        noVehicle;
+      l.text('vehicle', lp.connected ? title : noVehicle);
     }
     if (structure.site.hasSmartCost && lp.smartCostActive !== null) {
       l.value('smart_cost', lp.smartCostActive ? 1 : 0);
