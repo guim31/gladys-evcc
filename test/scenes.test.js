@@ -1,93 +1,54 @@
+// Scene actions against the fake evcc: what is sent, what is refused.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
-import { createFakeGladys } from '@gladysassistant/integration-sdk/testing';
-import { DEVICE_BLUEPRINTS } from '../src/devices/index.js';
-import { MOTION_DETECTED_TRIGGER, motionSensor } from '../src/devices/motionSensor.js';
-import { SCENE_ACTIONS } from '../src/scenes.js';
-import { normalizeConfig } from '../src/config.js';
+import { createWorld, lpId, siteId, vehicleId } from './helpers/world.js';
 
-const manifest = JSON.parse(
-  await readFile(new URL('../gladys-assistant-integration.json', import.meta.url), 'utf8'),
-);
-const config = normalizeConfig();
-
-const declarationOf = (list, key) => manifest[list].find((entry) => entry.key === key);
-const keysOf = (list) => (list ?? []).map((entry) => entry.key);
-const deviceIdOf = (gladys, key) =>
-  DEVICE_BLUEPRINTS.find((bp) => bp.key === key).deviceExternalId(gladys);
-
-// Let the async interval callback run to completion.
-const flush = () => new Promise((resolve) => setImmediate(resolve));
-
-test('the motion sensor fires one motion_detected event per detection, none on the clear', async (t) => {
-  t.mock.timers.enable({ apis: ['setInterval', 'setTimeout'] });
-  const gladys = createFakeGladys();
-  const stopPush = motionSensor.startPush(gladys, config);
-  try {
-    t.mock.timers.tick(60_000);
-    await flush();
-    assert.equal(gladys.fake.sceneEvents.length, 1, 'one detection, one event');
-    assert.equal(gladys.fake.sceneEvents[0].key, MOTION_DETECTED_TRIGGER);
-    assert.equal(gladys.fake.states.at(-1).state, 1, 'the state is still published');
-
-    t.mock.timers.tick(10_000);
-    await flush();
-    assert.equal(gladys.fake.states.at(-1).state, 0, 'the detection is cleared');
-    assert.equal(gladys.fake.sceneEvents.length, 1, 'the clear fires no event');
-  } finally {
-    stopPush();
-  }
+test('set_mode sends the mode to the loadpoint', async (t) => {
+  const world = await createWorld();
+  t.after(() => world.app.stop());
+  const ack = await world.fake.sceneAction('set_mode', { device: lpId(2), mode: 'pv' });
+  assert.equal(ack.success, true, ack.error);
+  assert.deepEqual(world.server.writes.at(-1), { loadpoint: 2, mode: 'pv' });
 });
 
-test('motion_detected data only carries keys the trigger declares', async (t) => {
-  t.mock.timers.enable({ apis: ['setInterval', 'setTimeout'] });
-  const gladys = createFakeGladys();
-  const stopPush = motionSensor.startPush(gladys, config);
-  try {
-    t.mock.timers.tick(60_000);
-    await flush();
-  } finally {
-    stopPush();
-  }
-  const [{ data }] = gladys.fake.sceneEvents;
-  const trigger = declarationOf('scene_triggers', MOTION_DETECTED_TRIGGER);
-  // The core keeps the `fields` keys (filters) and the `variables` keys
-  // (exposed to the scene): any other key would be silently dropped.
-  const declared = [...keysOf(trigger.fields), ...keysOf(trigger.variables)];
-  for (const [key, value] of Object.entries(data)) {
-    assert.ok(declared.includes(key), `data.${key} is not declared, the core would drop it`);
-    assert.ok(value === null || typeof value !== 'object', `data.${key} must be a primitive`);
-  }
-  // A `"source": "devices"` filter stores a device external_id.
-  assert.equal(data.device, deviceIdOf(gladys, 'motion-sensor'));
-  const targets = trigger.fields.find((field) => field.key === 'target').options;
-  assert.ok(
-    targets.some((option) => option.value === data.target),
-    `data.target "${data.target}" must be one of the filter options`,
+test('set_limit: battery level of a loadpoint or a vehicle, energy of a loadpoint', async (t) => {
+  const world = await createWorld();
+  t.after(() => world.app.stop());
+  const run = (fields) => world.fake.sceneAction('set_limit', fields);
+  assert.equal((await run({ device: lpId(1), limit_type: 'soc', value: 80 })).success, true);
+  assert.equal(
+    (await run({ device: vehicleId('vehicle_1'), limit_type: 'soc', value: '90' })).success,
+    true,
   );
+  assert.equal((await run({ device: lpId(1), limit_type: 'energy', value: 12.5 })).success, true);
+  assert.deepEqual(world.server.writes, [
+    { loadpoint: 1, limitsoc: '80' },
+    { vehicle: 'vehicle_1', limitsoc: '90' },
+    { loadpoint: 1, limitenergy: '12.5' },
+  ]);
 });
 
-test('identify_device signals the chosen device and returns the declared outputs', async () => {
-  const gladys = createFakeGladys();
-  const outputs = await SCENE_ACTIONS.identify_device(gladys, {
-    fields: { device: deviceIdOf(gladys, 'light') },
-    config,
+test('refusals: vehicle energy, out of range, the site, an unknown device, evcc down', async (t) => {
+  const world = await createWorld();
+  t.after(() => world.app.stop());
+  const run = (key, fields) => world.fake.sceneAction(key, fields);
+  const energy = await run('set_limit', {
+    device: vehicleId('vehicle_1'),
+    limit_type: 'energy',
+    value: 10,
   });
-  assert.deepEqual(outputs, { signalled: true });
-  const declared = keysOf(declarationOf('scene_actions', 'identify_device').outputs);
-  for (const key of Object.keys(outputs)) {
-    assert.ok(declared.includes(key), `output "${key}" is not declared, the core would drop it`);
-  }
-});
-
-test('identify_device reports a device that cannot signal itself through its output', async () => {
-  // Not a failure: a scene action is never a condition, the scene author
-  // gates the following actions on the output instead.
-  const gladys = createFakeGladys();
-  const outputs = await SCENE_ACTIONS.identify_device(gladys, {
-    fields: { device: deviceIdOf(gladys, 'weather-station') },
-    config,
-  });
-  assert.deepEqual(outputs, { signalled: false });
+  assert.equal(energy.success, false);
+  assert.match(energy.error, /limite d'énergie/);
+  assert.equal(
+    (await run('set_limit', { device: lpId(1), limit_type: 'soc', value: 150 })).success,
+    false,
+  );
+  assert.equal((await run('set_mode', { device: siteId(), mode: 'now' })).success, false);
+  assert.equal((await run('set_mode', { device: 'ext:other:x', mode: 'now' })).success, false);
+  assert.equal((await run('set_mode', { device: lpId(1), mode: 'turbo' })).success, false);
+  assert.equal(world.server.writes.length, 0);
+  world.server.stop();
+  const down = await run('set_mode', { device: lpId(1), mode: 'now' });
+  assert.equal(down.success, false);
+  assert.match(down.error, /evcc ne répond pas/);
 });

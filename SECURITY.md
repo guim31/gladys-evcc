@@ -30,6 +30,18 @@ Gladys before reporting a problem.
 
 In scope: the code of this repository and the Docker image it publishes.
 
+What the integration handles:
+
+- the address of evcc and, when set, its admin password, stored by Gladys in
+  the integration configuration (never written under `/data`, never logged);
+- under `/data`, only `evcc-structure.json`: the meters, loadpoints and
+  vehicle names of the evcc installation, so the devices stay listed while
+  evcc is off;
+- network: plain HTTP and websocket to the configured evcc address on the
+  local network, nothing else. `/api/state` of evcc also returns settings the
+  integration never reads nor logs (MQTT, InfluxDB and messaging credentials, EEBUS
+  certificate): they are dropped as soon as the state is read.
+
 Out of scope: Gladys Assistant itself (see its
 [security policy](https://github.com/GladysAssistant/Gladys/security/policy)),
-and the third-party services and devices the integration talks to.
+and evcc, the chargers and vehicles it controls.

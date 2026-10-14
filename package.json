@@ -1,8 +1,8 @@
 {
-  "name": "gladys-integration-template-js",
+  "name": "gladys-evcc",
   "version": "1.0.0",
   "private": true,
-  "description": "Official starter template to build an external integration for Gladys Assistant with the JavaScript SDK.",
+  "description": "Gladys Assistant integration for evcc: solar EV charging, loadpoints, vehicles, modes and limits.",
   "type": "module",
   "main": "index.js",
   "scripts": {
