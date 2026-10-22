@@ -1,6 +1,6 @@
 {
   "name": "gladys-evcc",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Gladys Assistant integration for evcc: solar EV charging, loadpoints, vehicles, modes and limits.",
   "type": "module",
